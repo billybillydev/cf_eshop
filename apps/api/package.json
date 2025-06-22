@@ -1,0 +1,34 @@
+{
+  "name": "@eshop/api",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:studio": "drizzle-kit studio",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:seed": "bun run src/db/seed.ts"
+  },
+  "dependencies": {
+    "@eshop/application": "*",
+    "@eshop/business": "*",
+    "@faker-js/faker": "^8.4.1",
+    "@hono/swagger-ui": "^0.5.2",
+    "@hono/zod-openapi": "^0.19.8",
+    "@hono/zod-validator": "^0.2.2",
+    "@libsql/client": "latest",
+    "@t3-oss/env-core": "^0.10.1",
+    "better-sqlite3": "^8.6.0",
+    "bun-sqlite-migrations": "^1.0.2",
+    "drizzle-kit": "^0.31.1",
+    "drizzle-orm": "^0.44.2",
+    "drizzle-typebox": "^0.1.1",
+    "hono": "^4.5.8",
+    "qs": "^6.13.0",
+    "radash": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/qs": "^6.9.15",
+    "dotenv": "^16.4.5"
+  }
+}

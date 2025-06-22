@@ -1,0 +1,76 @@
+{
+  "name": "eshop",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build:packages": "turbo run build --filter=@eshop/application --filter=@eshop/business --filter=@eshop/css",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:api": "cd apps/api && bun dev",
+    "dev:react": "cd apps/react && bun dev",
+    "start:react": "turbo run start --filter=@eshop/react",
+    "start:dev": "turbo run start:dev",
+    "start:dev:react": "cd apps/react && bun start:dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "test:react": "turbo run test --filter=@eshop/react",
+    "test:business": "bun run test --filter=@eshop/business",
+    "format:apps": "prettier --write './apps/**/*.{js,jsx,ts,tsx}'",
+    "format:packages": "prettier --write './packages/**/*.{js,jsx,ts,tsx}'",
+    "format": "bun run format:apps && bun run format:packages",
+    "prepare": "husky",
+    "docker:api:up": "docker-compose up --build api",
+    "docker:api:down": "docker-compose down api",
+    "docker:react:up": "docker-compose up --build react",
+    "docker:react:down": "docker-compose down react",
+    "db:generate": "cd apps/api && bun db:generate",
+    "db:studio": "drizzle-kit studio",
+    "db:migrate": "cd apps/api && bun db:migrate",
+    "db:push": "cd apps/api && bun db:push",
+    "db:seed": "cd apps/api && bun db:seed",
+    "clean": "bunx rimraf --glob **/node_modules"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "bun lint & bun format"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "bun lint",
+      "bun format"
+    ]
+  },
+  "packageManager": "bun@1.0.0",
+  "dependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "husky": "^9.1.1",
+    "lint-staged": "^15.2.7",
+    "path": "^0.12.7",
+    "qs": "^6.13.0",
+    "zod": "^3.25.49"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/qs": "^6.9.15",
+    "@types/tailwindcss": "^3.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.2.4",
+    "turbo": "^2.0.9"
+  },
+  "peerDependencies": {
+    "typescript": "^5.6.2"
+  }
+}

@@ -1,0 +1,106 @@
+@hostname = http://localhost
+@api_port = 4000
+@react_port = 3001
+@apiUrl = {{hostname}}:{{api_port}}/api
+
+
+# ------------- API Product ------------- #
+
+### Create a product
+POST {{apiUrl}}/products
+content-type: application/json
+
+{
+    "name": "Spinner ninja",
+    "description": "yes we can",
+    "quantity": 25,
+    "category": {
+        "id": 2,
+        "name": "kids"
+    },
+    "internalReference": "The way of shinobi",
+    "shellId": 239,
+    "price": 299,
+    "image": "https://loremflickr.com/cache/resized/defaultImage.small_640_480_nofilter.jpg"
+}
+
+### Get Product list
+GET {{apiUrl}}/products
+
+### Get Product by ID
+GET {{apiUrl}}/products/51
+
+### Get Product by code
+GET {{apiUrl}}/products/code/generic-rubber-computer
+
+### Update a product
+PATCH {{apiUrl}}/products/51
+content-type: application/json
+
+{
+    "quantity": 36
+}
+
+### Delete a product by id
+DELETE {{apiUrl}}/products/47
+
+### Filter products by category
+GET {{apiUrl}}/products?category=kids
+
+### Filter products by category with empty list
+GET {{apiUrl}}/products?category=inexistant
+
+### Filter products by product name
+GET {{apiUrl}}/products?productName=spinn
+
+### Filter products by product name with empty list
+GET {{apiUrl}}/products?productName=abcd
+
+### Filter products by product name and category
+GET {{apiUrl}}/products?productName=rec&category=shoes
+
+### Products pagination with limit = 18
+GET {{apiUrl}}/products/paginate?page=1&limit=8
+
+### Products pagination with limit = 16
+GET {{apiUrl}}/products/paginate?page=2&limit=16
+
+### Products pagination with page greater than last page
+GET {{apiUrl}}/products/paginate?page=5&limit=16
+
+### Products pagination with productName as filters
+GET {{apiUrl}}/products/paginate?limit=8&page=1&productName=fr
+
+### Products pagination with productName and category as filters
+GET {{apiUrl}}/products/paginate?category=kids&productName=fr&page=1&limit=8
+
+
+# ------------- API Category ------------- #
+
+### Get Category list json
+GET {{apiUrl}}/categories
+
+
+# ------------- API User ------------- #
+
+### Get user
+POST {{apiUrl}}/authenticate/token
+content-type: application/json
+
+{
+    "email": "john@doe.com"
+}
+
+### Create user
+POST {{apiUrl}}/authenticate/account
+content-type: application/json
+
+{
+    "username": "johndoe",
+    "firstname": "John Doe",
+    "email": "john@doe.com",
+    "password": "password"
+}
+
+### Logout user
+DELETE {{apiUrl}}/authenticate/logout

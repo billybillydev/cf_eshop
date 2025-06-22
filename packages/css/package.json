@@ -1,0 +1,28 @@
+{
+  "name": "@eshop/css",
+  "type": "module",
+  "scripts": {
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/tailwindcss": "^3.1.0",
+    "tsup": "^8.2.4"
+  },
+  "peerDependencies": {
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "tailwindcss": "^3.4.11",
+    "tailwindcss-mosiui-mini": "^0.2.8"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "src",
+    "dist",
+    "package.json",
+    "tsconfig.json"
+  ]
+}

@@ -1,0 +1,10 @@
+# Ignore specfic files:
+bun.lockb
+
+# Except these directories
+!/apps
+!/packages
+
+# Ignore specific files or directories inside apps and packages if needed
+# /apps/**/*.test.ts
+# /packages/**/*.test.ts

@@ -1,0 +1,1 @@
+export * from "$domain/usecases/email/send-contact-email.usecase";

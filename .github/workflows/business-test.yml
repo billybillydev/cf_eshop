@@ -1,0 +1,34 @@
+name: Business CI
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - packages/business
+  merge_group:
+
+jobs:
+  test:
+    name: Run Package Business Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node version 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Bun as package manager
+        run: npm install -g bun
+
+      - name: Install Turbo
+        run: bun add -d turbo
+
+      - name: Install dependencies for packages Business
+        run: bun install --filter=@eshop/business
+
+      - name: Test business
+        run: bun run test:business

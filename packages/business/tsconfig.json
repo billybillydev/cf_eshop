@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "moduleDetection": "force",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "types": ["bun-types", "jest"],
+    "baseUrl": ".",
+    "paths": {
+      "$domain": ["src/domain"],
+      "$domain/*": ["src/domain/*"],
+      "$infrastructure": ["src/infrastructure"],
+      "$infrastructure/*": ["src/infrastructure/*"]
+    }
+  },
+  "include": ["src", "tests"],
+  "exclude": ["./dist"]
+}

@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: api
+    env_file:
+      - apps/api/.env
+    environment:
+      - SEEDING_DB=false
+    ports:
+      - 4000:4000
+    volumes:
+      - ./apps/api:/app/apps/api  # Mount the api application directory
+    networks:
+      - node-network
+  
+  react:
+    build:
+      context: .
+      dockerfile: apps/react/Dockerfile
+    container_name: react
+    env_file:
+      - apps/react/.env
+    environment:
+      - API_URL=http://api:4000/api
+    ports:
+      - 3001:3001
+    depends_on:
+      - api
+    volumes:
+      - ./apps/react:/app/apps/react  # Mount the react application directory
+    networks:
+      - node-network
+
+#   mongo:
+#     image: mongo:7.0.14-rc0-jammy
+#     container_name: mongo
+#     env_file:
+#       - apps/api/.env
+#     ports:
+#       - 27017:27017
+#     volumes:
+#       - mongo-data:/data/db
+#     networks:
+#       - node-network
+
+# volumes:
+#   mongo-data:
+#     driver: local
+
+networks:
+  node-network:
+    driver: bridge
