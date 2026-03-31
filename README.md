@@ -1,109 +1,110 @@
-# Consignes
+# cf_eshop
 
-- Vous êtes développeur front-end : vous devez réaliser les consignes décrites dans le chapitre [Front-end](#Front-end)
+A minimal e-commerce web application demonstrating modern full-stack development on the edge.
 
-- Vous êtes développeur back-end : vous devez réaliser les consignes décrites dans le chapitre [Back-end](#Back-end) (*)
+## Tech Stack
 
-- Vous êtes développeur full-stack : vous devez réaliser les consignes décrites dans le chapitre [Front-end](#Front-end) et le chapitre [Back-end](#Back-end) (*)
+- **API** — [Hono](https://hono.dev) (lightweight, edge-first web framework)
+- **Frontend** — [React](https://react.dev) (primary), with SvelteKit and Next.js apps scaffolded for future use
+- **Monorepo** — [Bun](https://bun.sh) workspaces
+- **Edge Services** — [Cloudflare](https://developers.cloudflare.com) (Workers, D1, KV, Assets)
+- **CI/CD** — GitHub Actions
 
-(*) Afin de tester votre API, veuillez proposer une stratégie de test appropriée.
+## Architecture
 
-## Front-end
+The project follows **Hexagonal Architecture**, **TDD** and **DDD** principles:
 
-Le site de e-commerce d'Alten a besoin de s'enrichir de nouvelles fonctionnalités.
-
-### Partie 1 : Shop
-
-- Afficher toutes les informations pertinentes d'un produit sur la liste
-- Permettre d'ajouter un produit au panier depuis la liste 
-- Permettre de supprimer un produit du panier
-- Afficher un badge indiquant la quantité de produits dans le panier
-- Permettre de visualiser la liste des produits qui composent le panier.
-
-### Partie 2
-
-- Créer un nouveau point de menu dans la barre latérale ("Contact")
-- Créer une page "Contact" affichant un formulaire
-- Le formulaire doit permettre de saisir son email, un message et de cliquer sur "Envoyer"
-- Email et message doivent être obligatoirement remplis, message doit être inférieur à 300 caractères.
-- Quand le message a été envoyé, afficher un message à l'utilisateur : "Demande de contact envoyée avec succès".
-
-### Bonus : 
-
-- Ajouter un système de pagination et/ou de filtrage sur la liste des produits
-- On doit pouvoir visualiser et ajuster la quantité des produits depuis la liste et depuis le panier 
-
-## Back-end
-
-### Partie 1
-
-Développer un back-end permettant la gestion de produits définis plus bas.
-Vous pouvez utiliser la technologie de votre choix parmi la liste suivante :
-
-- Node.js/Express
-- Java/Spring Boot
-- C#/.net Core
-- PHP/Symphony : Utilisation d'API Platform interdite
-
-
-Le back-end doit gérer les API suivantes : 
-
-| Resource           | POST                  | GET                            | PATCH                                    | PUT | DELETE           |
-| ------------------ | --------------------- | ------------------------------ | ---------------------------------------- | --- | ---------------- |
-| **/products**      | Create a new product  | Retrieve all products          | X                                        | X   |     X            |
-| **/products/:id**  | X                     | Retrieve details for product 1 | Update details of product 1 if it exists | X   | Remove product 1 |
-
-Un produit a les caractéristiques suivantes : 
-
-``` typescript
-class Product {
-  id: number;
-  code: string;
-  name: string;
-  description: string;
-  image: string;
-  category: string;
-  price: number;
-  quantity: number;
-  internalReference: string;
-  shellId: number;
-  inventoryStatus: "INSTOCK" | "LOWSTOCK" | "OUTOFSTOCK";
-  rating: number;
-  createdAt: number;
-  updatedAt: number;
-}
+```
+packages/
+  business/    # Domain layer — entities, value objects, use cases, port interfaces
+  application/ # Application layer — shared utilities (FetchApi, etc.)
+  css/         # Shared design tokens and themes
+apps/
+  api/         # Hono API deployed as a Cloudflare Worker
+  react/       # React SPA (Vite + TailwindCSS)
+  sveltekit/   # SvelteKit app (planned)
+  next/        # Next.js app (planned)
 ```
 
-Le back-end créé doit pouvoir gérer les produits dans une base de données SQL/NoSQL ou dans un fichier json.
+The **business** package is framework-agnostic: entities, use cases and repository interfaces live here with no dependency on any runtime or framework. Each app implements its own repository adapters against these ports.
 
-### Partie 2
+## Features
 
-- Imposer à l'utilisateur de se connecter pour accéder à l'API.
-  La connexion doit être gérée en utilisant un token JWT.  
-  Deux routes devront être créées :
-  * [POST] /account -> Permet de créer un nouveau compte pour un utilisateur avec les informations fournies par la requête.   
-    Payload attendu : 
-    ```
-    {
-      username: string,
-      firstname: string,
-      email: string,
-      password: string
-    }
-    ```
-  * [POST] /token -> Permet de se connecter à l'application.  
-    Payload attendu :  
-    ```
-    {
-      email: string,
-      password: string
-    }
-    ```
-    Une vérification devra être effectuée parmi tout les utilisateurs de l'application afin de connecter celui qui correspond aux infos fournies. Un token JWT sera renvoyé en retour de la reqûete.
-- Faire en sorte que seul l'utilisateur ayant le mail "admin@admin.com" puisse ajouter, modifier ou supprimer des produits. Une solution simple et générique devra être utilisée. Il n'est pas nécessaire de mettre en place une gestion des accès basée sur les rôles.
-- Ajouter la possibilité pour un utilisateur de gérer un panier d'achat pouvant contenir des produits.
-- Ajouter la possibilité pour un utilisateur de gérer une liste d'envie pouvant contenir des produits.
+### API (`apps/api`)
 
-## Bonus
+- **Products** — list (with pagination and filtering by category/name), get by ID, get by code
+- **Categories** — list all, get by ID
+- **Authentication** — account creation, JWT login/logout, cookie-based token management
+- **Admin** — create, update and delete products (restricted to admin users via middleware)
+- **Cart** — GET/PUT/DELETE backed by Cloudflare KV (`KV_CART`) with 24h TTL; supports both authenticated and anonymous users, with automatic cart merge on sign-in
+- **Checkout** — multi-step checkout flow (buyer info, delivery, payment)
 
-Vous pouvez ajouter des tests Postman ou Swagger pour valider votre API
+### Frontend (`apps/react`)
+
+- **Product catalog** — browsable product list with category filtering, name search and pagination
+- **Product detail** — dedicated page per product (by code)
+- **Cart** — add/remove/update quantity, cart badge in header, empty cart state, loading state
+- **Checkout** — multi-step checkout page
+- **Contact** — contact form with validation
+- **Authentication** — login, register, JWT persistence in localStorage
+- **User menu** — popover in header for signed-in users (profile, orders, favorites links)
+
+### Business Domain (`packages/business`)
+
+- **Entities** — `CartEntity`, `CartItemEntity`, `CartItemProductEntity`, `ProductEntity`, `ProductItemEntity`, `CategoryEntity`, `CustomerEntity`, `EmailInfoEntity`, `OrderEntity`
+- **Use Cases** — cart (add, delete, update quantity, get), product (show, get by id/code, create, update, remove), category (get all, get by id), customer (create, get by email, is admin), email, order
+- **Unit Tests** — comprehensive test suite covering use cases for cart, product, category, customer, email and order domains
+
+### CI/CD
+
+- **Business CI** — GitHub Action running unit tests on push/PR for `packages/business`
+
+## Getting Started
+
+### Prerequisites
+
+- [Bun](https://bun.sh) (v1.0+)
+- [Node.js](https://nodejs.org) (v20+ for CI compatibility)
+
+### Install
+
+```bash
+bun install
+```
+
+### Development
+
+```bash
+# Start all apps
+bun run dev
+
+# Or individually
+bun run dev:api    # Hono API on port 4000
+bun run dev:react  # React app (Vite)
+```
+
+### Database
+
+```bash
+bun run db:generate  # Generate Drizzle migrations
+bun run db:migrate   # Run migrations
+bun run db:seed      # Seed data
+```
+
+### Testing
+
+```bash
+bun run test            # Run all tests
+bun run test:business   # Run business domain tests only
+bun run test:react      # Run React tests only
+```
+
+### Build
+
+```bash
+bun run build
+```
+
+## License
+
+Private
