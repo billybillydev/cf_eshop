@@ -1,45 +1,46 @@
-import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
-import { config as dotenv } from "dotenv";
+import { AppBindings } from "$config/bindings";
+import { AppVariables } from "$config/variables";
+import "dotenv/config";
 
-dotenv();
+// const envSchema = z.object({
+//   NODE_ENV: z.enum(["development", "production"]),
+//   SEEDING_DB: z
+//     .enum(["true", "false"])
+//     .default("false")
+//     .transform((s) => s === "true"),
+//   DEFAULT_LIMITS: z.array(z.coerce.number()).default([8, 16, 32]),
+//   DEFAULT_PAGE: z.coerce.number().default(1),
+//   PORT: z.coerce.number(),
+//   ADMIN_EMAIL: z.string().email().default("admin@eshop.com"),
+//   JWT_SECRET: z.string(),
+//   HOST_URL: z.string(),
+//   ALLOWED_HOST: z.string(),
+//   CLOUDFLARE_ACCOUNT_ID: z.string(),
+//   CLOUDFLARE_DATABASE_ID: z.string(),
+//   CLOUDFLARE_D1_TOKEN: z.string(),
+//   DB: z.string().default("DB"),
+// });
 
-export const env = createEnv({
-  server: {
-    HOST_URL: z.string().default("http://localhost"),
-    DATABASE_CONNECTION_TYPE: z.enum(["local", "remote", "local-replica"]),
-    DATABASE_URL: z.string().optional(),
-    DATABASE_AUTH_TOKEN: z
-      .string()
-      .optional()
-      .refine((s) => {
-        // not needed for local only
-        const type = process.env.DATABASE_CONNECTION_TYPE;
-        return type === "remote" || type === "local-replica"
-          ? s && s.length > 0
-          : true;
-      }),
-    NODE_ENV: z.enum(["development", "production"]),
-    SEEDING_DB: z.enum(["true", "false"]).default("false").transform((s) => s === "true"),
-    DEFAULT_LIMITS: z.array(z.coerce.number()).default([8, 16, 32]),
-    DEFAULT_PAGE: z.coerce.number().default(1),
-    PORT: z.coerce.number(),
-    ADMIN_EMAIL: z.string().email().default("admin@eshop.com"),
-    JWT_SECRET: z.string(),
-  },
-  runtimeEnv: process.env,
-});
+// export const env = envSchema.parse(process.env);
 
 export const config = {
   db: {
-    authToken: env.DATABASE_AUTH_TOKEN,
-    type: env.DATABASE_CONNECTION_TYPE,
-    url: env.DATABASE_CONNECTION_TYPE === "local" ? "file:local.db" : "",
+    accountId: process.env.CLOUDFLARE_ACCOUNT_ID!,
+    databaseId: process.env.CLOUDFLARE_DATABASE_ID!,
+    token: process.env.CLOUDFLARE_D1_TOKEN!,
   },
-  baseURL: new URL(
-    env.NODE_ENV === "production" ? env.HOST_URL : env.HOST_URL + ":" + env.PORT
-  ),
-  port: env.PORT || 3000,
-  adminEmail: env.ADMIN_EMAIL,
-  jwtSecret: env.JWT_SECRET,
+  port: process.env.PORT!,
+  adminEmail: process.env.ADMIN_EMAIL!,
+  jwtSecret: process.env.JWT_SECRET!,
+  hostURL: process.env.HOST_URL!,
+  allowedHost: process.env.ALLOWED_HOST!,
+  // defaultLimits: process.env.DEFAULT_LIMITS!,
+  defaultLimits: [8, 16, 32],
+  // defaultPage: process.env.DEFAULT_PAGE!,
+  defaultPage: 1,
+};
+
+export type AppContext = {
+  Variables: AppVariables;
+  Bindings: AppBindings;
 };

@@ -6,12 +6,14 @@ import { CartItemEntity } from "$domain/entities/cart/cart-item.entity";
 import { IdObject, PriceObject } from "$domain/value-objects";
 
 export class CartEntity {
-  #items!: CartItemEntity[];
-  #totalQuantity!: number;
+  #items: CartItemEntity[] = [];
+  #totalQuantity: number = 0;
 
-  constructor(items: CartItemEntity[] = [], totalQuantity: number = 0) {
-    this.#items = items;
-    this.#totalQuantity = totalQuantity;
+  constructor(dto?: CartDTO) {
+    if (dto) {
+      this.#items = dto.items.map((item) => new CartItemEntity(item));
+      this.#totalQuantity = dto.totalQuantity ?? 0;
+    }
   }
 
   get items() {
@@ -31,7 +33,7 @@ export class CartEntity {
       return item.product.id.equals(product.id);
     });
     if (existingCartItemIndex < 0) {
-      const newItem = new CartItemEntity({ product, quantity });
+      const newItem = new CartItemEntity({ product: product.transformToDTO(), quantity });
       this.#items.push(newItem);
     } else {
       this.#items[existingCartItemIndex].updateQuantity(quantity);
@@ -85,12 +87,5 @@ export class CartEntity {
       items: this.items.map((item) => item.transformToDTO()),
       totalQuantity: this.totalQuantity,
     };
-  }
-
-  static transformToEntity({ items, totalQuantity }: CartDTO) {
-    return new CartEntity(
-      items.map(CartItemEntity.transformToEntity),
-      totalQuantity
-    );
   }
 }

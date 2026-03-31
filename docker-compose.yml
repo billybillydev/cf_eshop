@@ -4,12 +4,11 @@ services:
   api:
     build:
       context: .
-      dockerfile: apps/api/Dockerfile
+      dockerfile: Dockerfile
+      target: api
     container_name: api
     env_file:
       - apps/api/.env
-    environment:
-      - SEEDING_DB=false
     ports:
       - 4000:4000
     volumes:
@@ -20,7 +19,8 @@ services:
   react:
     build:
       context: .
-      dockerfile: apps/react/Dockerfile
+      dockerfile: Dockerfile
+      target: react
     container_name: react
     env_file:
       - apps/react/.env
@@ -34,22 +34,6 @@ services:
       - ./apps/react:/app/apps/react  # Mount the react application directory
     networks:
       - node-network
-
-#   mongo:
-#     image: mongo:7.0.14-rc0-jammy
-#     container_name: mongo
-#     env_file:
-#       - apps/api/.env
-#     ports:
-#       - 27017:27017
-#     volumes:
-#       - mongo-data:/data/db
-#     networks:
-#       - node-network
-
-# volumes:
-#   mongo-data:
-#     driver: local
 
 networks:
   node-network:

@@ -1,6 +1,5 @@
 /// <reference types="vitest" />
 import react from "@vitejs/plugin-react";
-import { join } from "path";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vite";
 import { env } from "./src/config";
@@ -8,6 +7,7 @@ import { env } from "./src/config";
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
+    allowedHosts: [env.HOST_URL],
     host: true,
     strictPort: true,
     port: env.PORT,
@@ -25,7 +25,11 @@ export default defineConfig({
       },
     },
   },
-  plugins: [react(), tsconfigPaths()],
+  build: {
+    outDir: "../api/public",
+    emptyOutDir: true,
+  },
+  plugins: [tsconfigPaths(), react()],
   resolve: {
     alias: {
       $: "/src",

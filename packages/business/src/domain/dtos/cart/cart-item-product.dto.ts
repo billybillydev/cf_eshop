@@ -6,4 +6,6 @@ export type CartItemProductDTO = {
   code: ProductDTO["code"];
   image: ProductDTO["image"];
   price: ProductDTO["price"];
+  category: ProductDTO["category"];
+  inventoryStatus: ProductDTO["inventoryStatus"];
 };

@@ -24,14 +24,17 @@ content-type: application/json
     "image": "https://loremflickr.com/cache/resized/defaultImage.small_640_480_nofilter.jpg"
 }
 
+@bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6InQxIiwiZmlyc3RuYW1lIjoiVGVzdCAxIiwiZW1haWwiOiJ0MUB0LmNvbSJ9LCJleHAiOjE3NzAwOTc2NDR9.poA6rshTkRhN4MIBlkLjEeqrCI9GkhP82p11-NX7Syk"
+
 ### Get Product list
 GET {{apiUrl}}/products
+Content-Type: application/json
 
 ### Get Product by ID
-GET {{apiUrl}}/products/51
+GET {{apiUrl}}/products/27
 
 ### Get Product by code
-GET {{apiUrl}}/products/code/generic-rubber-computer
+GET {{apiUrl}}/products/code/generic-fresh-chicken
 
 ### Update a product
 PATCH {{apiUrl}}/products/51
@@ -80,11 +83,19 @@ GET {{apiUrl}}/products/paginate?category=kids&productName=fr&page=1&limit=8
 ### Get Category list json
 GET {{apiUrl}}/categories
 
-
 # ------------- API User ------------- #
 
 ### Get user
 POST {{apiUrl}}/authenticate/token
+content-type: application/json
+
+{
+    "email": "t1@t.com",
+    "password": "azerty1234"
+}
+
+### Get is user admin
+POST {{apiUrl}}/authenticate/admin
 content-type: application/json
 
 {
@@ -96,10 +107,10 @@ POST {{apiUrl}}/authenticate/account
 content-type: application/json
 
 {
-    "username": "johndoe",
-    "firstname": "John Doe",
-    "email": "john@doe.com",
-    "password": "password"
+    "username": "t1",
+    "firstname": "Test 1",
+    "email": "t1@t.com",
+    "password": "azerty1234"
 }
 
 ### Logout user

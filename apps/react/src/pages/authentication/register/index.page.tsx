@@ -34,78 +34,167 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="container space-y-8 mx-auto">
-      <h1 className="text-center">Create an account</h1>
-      {error ? <p className="text-red-500 text-center">{error}</p> : null}
-      <form
-        className={clsx(
-          "flex flex-col gap-y-4 max-w-lg mx-auto justify-center items-center border p-4 rounded",
-          "[&>section]:flex [&>section]:flex-col [&>section]:gap-y-2 [&>section]:w-full",
-          "[&>section>input]:text-black"
-        )}
-        onSubmit={handleSubmit}
-      >
-        <section>
-          <label htmlFor="username">Username</label>
-          <input
-            id="username"
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
-            placeholder="Your username"
-            required
-          />
+    <div className="mx-auto max-w-6xl px-4 py-10">
+      <div className="mx-auto max-w-md">
+        <div className="text-center space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+            Join the community
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Create an account and start shopping today.
+          </p>
+        </div>
+
+        <section className="mt-6 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
+          <div className="h-1 bg-primary"></div>
+
+          <form onSubmit={handleSubmit} className="p-6 space-y-5">
+            <div className="space-y-2">
+              <label htmlFor="username" className="text-sm font-medium">
+                Username
+              </label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                autoComplete="username"
+                placeholder="your username"
+                onChange={(e) => setUsername(e.target.value)}
+                value={username}
+                required
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm shadow-sm
+                           placeholder:text-muted-foreground focus:ring-2 ring-ring"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="firstname" className="text-sm font-medium">
+                Firstname
+              </label>
+              <input
+                id="firstname"
+                name="firstname"
+                type="text"
+                autoComplete="firstname"
+                placeholder="your firstname"
+                onChange={(e) => setFirstname(e.target.value)}
+                value={firstname}
+                required
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm shadow-sm
+                           placeholder:text-muted-foreground focus:ring-2 ring-ring"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium">
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@domain.com"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                required
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm shadow-sm
+                           placeholder:text-muted-foreground focus:ring-2 ring-ring"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label htmlFor="password" className="text-sm font-medium">
+                  Password
+                </label>
+                <a
+                  href="/forgot-password"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                  Forgot password?
+                </a>
+              </div>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                placeholder="••••••••"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                required
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm shadow-sm
+                           placeholder:text-muted-foreground focus:ring-2 ring-ring"
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <label className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                <input
+                  type="checkbox"
+                  className="size-4 rounded border-border text-[hsl(var(--primary))] focus:ring-2 ring-ring"
+                />
+                Remember me
+              </label>
+
+              <span className="text-xs text-muted-foreground">
+                Secure login
+              </span>
+            </div>
+
+            {error ? (
+              <p className="text-red-600 text-center my-4">{error}</p>
+            ) : null}
+
+            <button
+              type="submit"
+              disabled={isPending}
+              className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium
+                         text-primary-foreground shadow-sm hover:opacity-95 focus:ring-2 ring-ring"
+            >
+              {isPending ? "Loading..." : "Sign Up"}
+            </button>
+
+            <div className="relative py-2">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-card px-2 text-xs text-muted-foreground">
+                  or
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button
+                type="button"
+                className="inline-flex h-10 items-center justify-center rounded-lg border border-border bg-card px-3 text-sm font-medium
+                           hover:bg-accent hover:text-accent-foreground"
+              >
+                Continue with GitHub
+              </button>
+              <button
+                type="button"
+                className="inline-flex h-10 items-center justify-center rounded-lg border border-border bg-card px-3 text-sm font-medium
+                           hover:bg-accent hover:text-accent-foreground"
+              >
+                Continue with Google
+              </button>
+            </div>
+          </form>
         </section>
 
-        <section>
-          <label htmlFor="firstname">Firstname</label>
-          <input
-            id="firstname"
-            onChange={(e) => setFirstname(e.target.value)}
-            value={firstname}
-            placeholder="Your firstname"
-            required
-          />
-        </section>
-
-        <section>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            placeholder="Your email"
-            type="email"
-            required
-          />
-        </section>
-
-        <section>
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            placeholder="Your password"
-            required
-          />
-        </section>
-
-        <section>
-          <button
-            className="btn btn-secondary"
-            disabled={isPending}
-            type="submit"
+        <p className="mt-5 text-center text-sm text-muted-foreground space-x-2">
+          <span>Already have an account ?</span>
+          <a
+            href="/login"
+            className="font-medium text-foreground hover:underline"
           >
-            {isPending ? "Loading..." : "Submit"}
-          </button>
-        </section>
-      </form>
-
-      <div className="p-4 text-center">
-        <a href="/login" className="link">
-          Already an account ? Sign in here
-        </a>
+            Sign in
+          </a>
+        </p>
       </div>
     </div>
   );

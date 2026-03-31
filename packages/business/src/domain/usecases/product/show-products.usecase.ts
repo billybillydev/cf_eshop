@@ -14,7 +14,7 @@ export class ShowProductsUseCase {
   ): Promise<[ProductItemEntity[], number]>;
   async execute(
     paginationParams?: ProductPaginationParameters
-  ): Promise<ProductItemEntity[] | [ProductItemEntity[], number]> {
+  ) {
     if (paginationParams) {
       return this.productRepository.paginate(paginationParams);
     }

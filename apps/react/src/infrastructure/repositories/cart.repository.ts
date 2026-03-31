@@ -10,27 +10,55 @@ import { IdObject } from "@eshop/business/domain/value-objects";
 import { CartRepositoryInterface } from "@eshop/business/infrastructure/ports";
 
 export class CartRepository implements CartRepositoryInterface {
-  private readonly cartCookieKey = "cart";
   private cart!: CartEntity;
+  private token?: string;
 
-  constructor(cartDTO?: CartDTO) {
-    this.cart = cartDTO
-      ? CartEntity.transformToEntity(cartDTO)
-      : new CartEntity();
+  constructor(token?: string) {
+    this.cart = new CartEntity();
+    this.token = token;
+  }
+
+  private get headers(): HeadersInit {
+    const h: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+    if (this.token) {
+      h["Authorization"] = `Bearer ${this.token}`;
+    }
+    return h;
+  }
+
+  private async syncToKV(): Promise<void> {
+    const cartDTO = this.cart.transformToDTO();
+    if (this.cart.totalQuantity === 0) {
+      await fetch("/api/cart", {
+        method: "DELETE",
+        headers: this.headers,
+        credentials: "include",
+      });
+    } else {
+      await fetch("/api/cart", {
+        method: "PUT",
+        headers: this.headers,
+        credentials: "include",
+        body: JSON.stringify(cartDTO),
+      });
+    }
   }
 
   async getCart(): Promise<CartEntity> {
-    const cartCookie = localStorage.getItem(this.cartCookieKey);
-    const cartData = cartCookie ? (JSON.parse(cartCookie) as CartDTO) : null;
-    if (cartData) {
-      this.cart = CartEntity.transformToEntity(cartData);
-    }
-    return Promise.resolve(this.cart);
+    const res = await fetch("/api/cart", {
+      headers: this.headers,
+      credentials: "include",
+    });
+    const cartData = (await res.json()) as CartDTO;
+    this.cart = new CartEntity(cartData);
+    return this.cart;
   }
 
   async getCartItemByProductId(productId: IdObject): Promise<CartItemEntity | null> {
     this.cart = await this.getCart();
-    return Promise.resolve(this.cart.items.find((item) => item.product.id.equals(productId)) ?? null);
+    return this.cart.items.find((item) => item.product.id.equals(productId)) ?? null;
   }
 
   async addToCart(
@@ -39,27 +67,15 @@ export class CartRepository implements CartRepositoryInterface {
   ): Promise<CartEntity> {
     this.cart = await this.getCart();
     this.cart.addItem(product, quantity);
-
-    const cartDTO = this.cart.transformToDTO();
-
-    localStorage.setItem(this.cartCookieKey, JSON.stringify(cartDTO));
-
-    return Promise.resolve(this.cart);
+    await this.syncToKV();
+    return this.cart;
   }
 
   async deleteItemFromCart(productId: IdObject): Promise<CartEntity> {
     this.cart = await this.getCart();
-
     this.cart.deleteItem(productId);
-
-    if (this.cart.totalQuantity === 0) {
-      localStorage.removeItem(this.cartCookieKey);
-    } else {
-      const cartDTO = this.cart.transformToDTO();
-      localStorage.setItem(this.cartCookieKey, JSON.stringify(cartDTO));
-    }
-
-    return Promise.resolve(this.cart);
+    await this.syncToKV();
+    return this.cart;
   }
 
   async updateItemQuantityInCart(
@@ -68,11 +84,7 @@ export class CartRepository implements CartRepositoryInterface {
   ): Promise<CartEntity> {
     this.cart = await this.getCart();
     this.cart.updateItemQuantity(productId, quantity);
-
-    const cartDTO = this.cart.transformToDTO();
-
-    localStorage.setItem(this.cartCookieKey, JSON.stringify(cartDTO));
-
-    return Promise.resolve(this.cart);
+    await this.syncToKV();
+    return this.cart;
   }
 }

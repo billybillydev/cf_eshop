@@ -1,7 +1,9 @@
 {
   "name": "@eshop/api",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
+    "dev": "wrangler dev --remote src/index.ts",
+    "deploy": "wrangler deploy --minify --keep-vars",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
     "db:migrate": "drizzle-kit migrate",
@@ -17,18 +19,19 @@
     "@hono/zod-validator": "^0.2.2",
     "@libsql/client": "latest",
     "@t3-oss/env-core": "^0.10.1",
-    "better-sqlite3": "^8.6.0",
     "bun-sqlite-migrations": "^1.0.2",
-    "drizzle-kit": "^0.31.1",
-    "drizzle-orm": "^0.44.2",
+    "drizzle-kit": "^0.31.8",
+    "drizzle-orm": "^0.45.1",
     "drizzle-typebox": "^0.1.1",
     "hono": "^4.5.8",
     "qs": "^6.13.0",
-    "radash": "^12.1.0"
+    "radash": "^12.1.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/qs": "^6.9.15",
-    "dotenv": "^16.4.5"
+    "dotenv": "^17.2.3",
+    "wrangler": "^4.59.3"
   }
 }

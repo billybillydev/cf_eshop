@@ -1,17 +1,17 @@
-import { env } from "$config";
-import { db } from "$db";
+import { config } from "$config";
+import { AppBindings } from "$config/bindings";
 import { categorySchema, Product, productSchema } from "$db/schemas";
+import { D1DBRepository } from "$infrastructure/repositories/d1-db.repository";
 import {
   CreateProductDTO,
   UpdateProductDTO,
 } from "@eshop/business/domain/dtos";
 import {
-  CategoryEntity,
   InventoryStatus,
   ProductEntity,
-  ProductItemEntity,
+  ProductItemEntity
 } from "@eshop/business/domain/entities";
-import { IdObject, PriceObject } from "@eshop/business/domain/value-objects";
+import { IdObject } from "@eshop/business/domain/value-objects";
 import {
   ProductFilterParameters,
   ProductPaginationParameters,
@@ -20,16 +20,20 @@ import {
 import { and, eq, like, sql } from "drizzle-orm";
 import { dash } from "radash";
 
-export class ProductRepository implements ProductRepositoryInterface {
-  readonly defaultLimits = env.DEFAULT_LIMITS;
-  readonly defaultPage = env.DEFAULT_PAGE;
+export class ProductRepository extends D1DBRepository implements ProductRepositoryInterface {
+  readonly defaultLimits = config.defaultLimits;
+  readonly defaultPage = config.defaultPage;
   readonly lowStockThreshold = 10;
+  
+    constructor(bindingName: AppBindings["DB"]){
+      super(bindingName)
+    }
 
   async save(productData: CreateProductDTO): Promise<ProductEntity> {
     const quantity = productData.quantity ?? 0;
     const inventoryStatus = this.setInventoryStatus(quantity);
 
-    const [resultWithId] = await db
+    const [resultWithId] = await this.db
       .insert(productSchema)
       .values(
         {
@@ -46,13 +50,11 @@ export class ProductRepository implements ProductRepositoryInterface {
 
   async showAll(): Promise<ProductItemEntity[]> {
     try {
-      const res = await db.query.productSchema.findMany({
+      const res = await this.db.query.productSchema.findMany({
         with: { category: true },
       });
 
-      const products = res.map(this.convertModelToItemEntity);
-
-      return products;
+      return res.map(this.convertModelToItemEntity);;
     } catch (error) {
       console.error(error);
       return [];
@@ -61,7 +63,7 @@ export class ProductRepository implements ProductRepositoryInterface {
 
   async getById(id: IdObject): Promise<ProductEntity | null> {
     try {
-      const res = await db.query.productSchema.findFirst({
+      const res = await this.db.query.productSchema.findFirst({
         where: (product, { eq }) => eq(product.id, id.value()),
         with: { category: true },
       });
@@ -79,7 +81,7 @@ export class ProductRepository implements ProductRepositoryInterface {
 
   async getByCode(code: string): Promise<ProductEntity | null> {
     try {
-      const res = await db.query.productSchema.findFirst({
+      const res = await this.db.query.productSchema.findFirst({
         where: (product, { eq }) => eq(product.code, code),
         with: { category: true },
       });
@@ -99,7 +101,7 @@ export class ProductRepository implements ProductRepositoryInterface {
     const quantity = productData.quantity ?? 0;
     const inventoryStatus = this.setInventoryStatus(quantity);
 
-    const [resultWithId] = await db
+    const [resultWithId] = await this.db
       .update(productSchema)
       .set({
         ...productData,
@@ -119,7 +121,7 @@ export class ProductRepository implements ProductRepositoryInterface {
       { id: id.value() },
       "Error deleting product"
     );
-    await db.delete(productSchema).where(eq(productSchema.id, id.value())).returning({ id: productSchema.id });
+    await this.db.delete(productSchema).where(eq(productSchema.id, id.value())).returning({ id: productSchema.id });
 
     return productToDelete;
   }
@@ -145,7 +147,7 @@ export class ProductRepository implements ProductRepositoryInterface {
       const offset = ((params.page ?? this.defaultPage) - 1) * limit;
 
       const [res, totalCount] = await Promise.all([
-        db
+        this.db
           .select()
           .from(productSchema)
           .innerJoin(
@@ -155,7 +157,7 @@ export class ProductRepository implements ProductRepositoryInterface {
           .where(and(...filters))
           .limit(limit)
           .offset(offset),
-        db
+        this.db
           .select({ count: sql<number>`count(*)` })
           .from(productSchema)
           .innerJoin(
@@ -182,19 +184,16 @@ export class ProductRepository implements ProductRepositoryInterface {
 
   private convertModelToEntity(product: Product): ProductEntity {
     return new ProductEntity({
-      id: new IdObject(product.id),
+      id: product.id,
       name: product.name,
       code: product.code,
       description: product.description,
       quantity: product.quantity,
-      price: new PriceObject(product.price),
+      price: product.price,
       image: product.image,
       internalReference: product.internalReference,
-      category: new CategoryEntity({
-        id: new IdObject(product.category.id),
-        name: product.category.name,
-      }),
-      shellId: new IdObject(product.shellId),
+      category: product.category,
+      shellId: product.shellId,
       inventoryStatus: product.inventoryStatus as InventoryStatus,
       rating: product.rating,
       createdAt: product.createdAt,
@@ -204,17 +203,14 @@ export class ProductRepository implements ProductRepositoryInterface {
 
   private convertModelToItemEntity(product: Product): ProductItemEntity {
     return new ProductItemEntity({
-      id: new IdObject(product.id),
+      id: product.id,
       name: product.name,
       code: product.code,
-      price: new PriceObject(product.price),
+      price: product.price,
       image: product.image,
-      category: new CategoryEntity({
-        id: new IdObject(product.category.id),
-        name: product.category.name,
-      }),
+      category: product.category,
       internalReference: product.internalReference,
-      shellId: new IdObject(product.shellId),
+      shellId: product.shellId,
       inventoryStatus: product.inventoryStatus as InventoryStatus,
       rating: product.rating,
     });
@@ -226,7 +222,7 @@ export class ProductRepository implements ProductRepositoryInterface {
       throw new Error(errorMessage);
     }
 
-    const deletedProduct = await db.query.productSchema.findFirst({
+    const deletedProduct = await this.db.query.productSchema.findFirst({
       where: (product, { eq }) => eq(product.id, objectId.id),
       with: { category: true },
     });

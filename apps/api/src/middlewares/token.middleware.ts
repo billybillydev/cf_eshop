@@ -6,7 +6,7 @@ import { bearerAuth } from "hono/bearer-auth";
 export const tokenMiddleware: MiddlewareHandler<{
   Variables: AppVariables;
 }> = async (c, next) => {
-  let token = getCookie(c, "jwtPayload");
+  const token = getCookie(c, "jwtPayload");
   if (token) {
     bearerAuth({ token })
   }

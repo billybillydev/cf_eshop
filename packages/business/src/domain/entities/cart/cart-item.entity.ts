@@ -5,9 +5,9 @@ export class CartItemEntity {
   #product!: CartItemProductEntity;
   #quantity!: number;
 
-  constructor(data: { product: CartItemProductEntity; quantity?: number }) {
-    this.#product = data.product;
-    this.#quantity = data.quantity ?? 1;
+  constructor(dto: CartItemDTO) {
+    this.#product = new CartItemProductEntity(dto.product);
+    this.#quantity = dto.quantity ?? 1;
   }
 
   get product() {
@@ -31,13 +31,5 @@ export class CartItemEntity {
       product: this.product.transformToDTO(),
       quantity: this.quantity,
     };
-  }
-
-  static transformToEntity({ product, quantity }: CartItemDTO) {
-    return new CartItemEntity({
-      product:
-        CartItemProductEntity.transformToEntity(product),
-      quantity,
-    });
   }
 }

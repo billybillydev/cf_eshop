@@ -1,17 +1,21 @@
 import { CartEntity, CartItemProductEntity } from "$domain/entities";
 import { AddToCartUseCase, GetCartUseCase } from "$domain/usecases/cart";
-import { IdObject, PriceObject } from "$domain/value-objects";
 import { InMemoryCartRepository } from "$infrastructure/adapters/in-memory";
 import { beforeEach, describe, expect, it } from "@jest/globals";
 
 let cartRepository: InMemoryCartRepository;
 const product = new CartItemProductEntity({
-  id: new IdObject(8),
+  id: 8,
   name: "Elegant Metal Chips",
   code: "elegant-metal-chips",
-  price: new PriceObject(1424.00),
+  price: 1424.00,
   image:
     "https://loremflickr.com/640/480/computers?lock=5251611119058944/thumbnail",
+  category: {
+    id: 1,
+    name: "Electronics",
+  },
+  inventoryStatus: "INSTOCK",
 });
 
 beforeEach(() => {

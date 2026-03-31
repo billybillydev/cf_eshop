@@ -25,45 +25,30 @@ export class ProductEntity {
 
   #lowStockThreshold = 10;
 
-  constructor(productData: {
-    id: IdObject;
-    name: string;
-    code: string;
-    description: string;
-    category: CategoryEntity;
-    image: string;
-    price: PriceObject;
-    internalReference: string;
-    shellId: IdObject;
-    inventoryStatus?: InventoryStatus;
-    rating?: number;
-    createdAt?: number;
-    updatedAt?: number;
-    quantity?: number;
-  }) {
-    this.id = productData.id;
-    this.#name = productData.name;
-    this.#code = productData.code;
-    this.description = productData.description;
-    this.category = productData.category;
-    this.image = productData.image;
-    this.price = productData.price;
-    this.internalReference = productData.internalReference;
-    this.shellId = productData.shellId;
-    if (productData.inventoryStatus) {
-      this.#inventoryStatus = productData.inventoryStatus;
+  constructor(dto: ProductDTO) {
+    this.id = new IdObject(dto.id);
+    this.#name = dto.name;
+    this.#code = dto.code;
+    this.description = dto.description;
+    this.category = new CategoryEntity(dto.category);
+    this.image = dto.image;
+    this.price = new PriceObject(dto.price);
+    this.internalReference = dto.internalReference;
+    this.shellId = new IdObject(dto.shellId);
+    if (dto.inventoryStatus) {
+      this.#inventoryStatus = dto.inventoryStatus;
     }
-    if (productData.createdAt) {
-      this.createdAt = productData.createdAt;
+    if (dto.createdAt) {
+      this.createdAt = dto.createdAt;
     }
-    if (productData.updatedAt) {
-      this.updatedAt = productData.updatedAt;
+    if (dto.updatedAt) {
+      this.updatedAt = dto.updatedAt;
     }
-    if (productData.rating) {
-      this.rating = productData.rating;
+    if (dto.rating) {
+      this.rating = dto.rating;
     }
-    if (productData.quantity !== undefined && productData.quantity > -1) {
-      this.#quantity = productData.quantity;
+    if (dto.quantity !== undefined && dto.quantity > -1) {
+      this.#quantity = dto.quantity;
     }
     this.setInventoryStatus(this.#quantity);
   }
@@ -115,28 +100,16 @@ export class ProductEntity {
 
   transformToItemEntity(): ProductItemEntity {
     return new ProductItemEntity({
-      id: this.id,
+      id: this.id.value(),
       name: this.#name,
       code: this.#code,
-      price: this.price,
+      price: this.price.getValue(),
       image: this.image,
-      category: this.category,
+      category: this.category.transformToDTO(),
       internalReference: this.internalReference,
-      shellId: this.shellId,
+      shellId: this.shellId.value(),
       inventoryStatus: this.#inventoryStatus,
       rating: this.rating,
-    });
-  }
-
-  static transformToEntity(
-    product: ProductDTO
-  ): ProductEntity {
-    return new ProductEntity({
-      ...product,
-      id: new IdObject(product.id),
-      price: new PriceObject(product.price),
-      shellId: new IdObject(product.shellId),
-      category: CategoryEntity.transformToEntity(product.category),
     });
   }
 

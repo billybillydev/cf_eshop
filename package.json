@@ -6,18 +6,16 @@
     "packages/*"
   ],
   "scripts": {
-    "build:packages": "turbo run build --filter=@eshop/application --filter=@eshop/business --filter=@eshop/css",
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "dev:api": "cd apps/api && bun dev",
-    "dev:react": "cd apps/react && bun dev",
-    "start:react": "turbo run start --filter=@eshop/react",
-    "start:dev": "turbo run start:dev",
-    "start:dev:react": "cd apps/react && bun start:dev",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
-    "test:react": "turbo run test --filter=@eshop/react",
-    "test:business": "bun run test --filter=@eshop/business",
+    "build:business": "bun run --filter @eshop/business build",
+    "build:packages": "bun run --filter './packages/*' build",
+    "build": "bun run '*' build",
+    "dev": "bun run --filter './apps/*' dev",
+    "dev:api": "bun --filter @eshop/api dev",
+    "dev:react": "bun --filter @eshop/react dev",
+    "lint": "bun run build:packages",
+    "test": "bun run --filter '*' test",
+    "test:react": "bun run --filter @eshop/react test",
+    "test:business": "bun run --filter @eshop/business test",
     "format:apps": "prettier --write './apps/**/*.{js,jsx,ts,tsx}'",
     "format:packages": "prettier --write './packages/**/*.{js,jsx,ts,tsx}'",
     "format": "bun run format:apps && bun run format:packages",
@@ -31,7 +29,9 @@
     "db:migrate": "cd apps/api && bun db:migrate",
     "db:push": "cd apps/api && bun db:push",
     "db:seed": "cd apps/api && bun db:seed",
-    "clean": "bunx rimraf --glob **/node_modules"
+    "clean": "bunx rimraf --glob **/node_modules",
+    "deploy:api": "fly deploy --app eshop-api --build-target api --config apps/api/fly.toml",
+    "deploy:react": "fly deploy --app eshop-react --build-target react --config apps/react/fly.toml"
   },
   "husky": {
     "hooks": {
@@ -67,8 +67,7 @@
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "rimraf": "^6.0.1",
-    "tsup": "^8.2.4",
-    "turbo": "^2.0.9"
+    "tsup": "^8.2.4"
   },
   "peerDependencies": {
     "typescript": "^5.6.2"

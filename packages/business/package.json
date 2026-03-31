@@ -8,7 +8,6 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "@types/bcrypt": "^5.0.2",
     "@types/bun": "latest",
     "@types/sinon": "^17.0.4",
     "bun-types": "^1.1.21",
@@ -47,13 +46,17 @@
       "import": "./dist/domain/usecases/email/index.js",
       "require": "./dist/domain/usecases/email/index.cjs"
     },
+    "./domain/usecases/order": {
+      "import": "./dist/domain/usecases/order/index.js",
+      "require": "./dist/domain/usecases/order/index.cjs"
+    },
     "./domain/usecases/product": {
       "import": "./dist/domain/usecases/product/index.js",
       "require": "./dist/domain/usecases/product/index.cjs"
     },
-    "./domain/usecases/user": {
-      "import": "./dist/domain/usecases/user/index.js",
-      "require": "./dist/domain/usecases/user/index.cjs"
+    "./domain/usecases/customer": {
+      "import": "./dist/domain/usecases/customer/index.js",
+      "require": "./dist/domain/usecases/customer/index.cjs"
     },
     "./infrastructure/adapters/in-memory": {
       "import": "./dist/infrastructure/adapters/in-memory/index.js",
@@ -70,7 +73,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^9.8.0",
-    "bcrypt": "^6.0.0",
+    "@mosidev/dat": "^2.3.0",
     "radash": "^12.1.0"
   }
 }

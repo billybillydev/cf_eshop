@@ -15,31 +15,20 @@ export class ProductItemEntity {
   readonly inventoryStatus: InventoryStatus = "OUTOFSTOCK";
   readonly rating: number = 0;
 
-  constructor(productData: {
-    id: IdObject;
-    name: string;
-    code: string;
-    category: CategoryEntity;
-    price: PriceObject;
-    image: string;
-    internalReference: string;
-    shellId: IdObject;
-    inventoryStatus?: InventoryStatus;
-    rating?: number;
-  }) {
-    this.id = productData.id;
-    this.name = productData.name;
-    this.code = productData.code;
-    this.category = productData.category;
-    this.price = productData.price;
-    this.image = productData.image;
-    this.internalReference = productData.internalReference;
-    this.shellId = productData.shellId;
-    if (productData.inventoryStatus) {
-      this.inventoryStatus = productData.inventoryStatus;
+  constructor(dto: ProductItemDTO) {
+    this.id = new IdObject(dto.id);
+    this.name = dto.name;
+    this.code = dto.code;
+    this.category = new CategoryEntity(dto.category);
+    this.price = new PriceObject(dto.price);
+    this.image = dto.image;
+    this.internalReference = dto.internalReference;
+    this.shellId = new IdObject(dto.shellId);
+    if (dto.inventoryStatus) {
+      this.inventoryStatus = dto.inventoryStatus;
     }
-    if (productData.rating) {
-      this.rating = productData.rating;
+    if (dto.rating) {
+      this.rating = dto.rating;
     }
   }
 
@@ -56,17 +45,5 @@ export class ProductItemEntity {
       inventoryStatus: this.inventoryStatus,
       rating: this.rating,
     };
-  }
-
-  static transformToEntity(
-    product: ProductItemDTO
-  ): ProductItemEntity {
-    return new ProductItemEntity({
-      ...product,
-      id: new IdObject(product.id),
-      price: new PriceObject(product.price),
-      shellId: new IdObject(product.shellId),
-      category: CategoryEntity.transformToEntity(product.category),
-    });
   }
 }

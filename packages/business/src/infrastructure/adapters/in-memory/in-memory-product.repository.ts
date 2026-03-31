@@ -49,7 +49,7 @@ export class InMemoryProductRepository implements ProductRepositoryInterface {
     if (this.products.some((product) => product.name === productData.name)) {
       throw new Error("Product already exists");
     }
-    const newProductEntity = ProductEntity.transformToEntity({
+    const newProductEntity = new ProductEntity({
       ...productData,
       id: this.products.length + 1,
       code: dash(productData.name),
@@ -100,7 +100,7 @@ export class InMemoryProductRepository implements ProductRepositoryInterface {
     };
 
     this.products[existingProductIndex] =
-      ProductEntity.transformToEntity(updatedProductDTO);
+      new ProductEntity(updatedProductDTO);
 
     return Promise.resolve(this.products[existingProductIndex]);
   }
@@ -200,26 +200,22 @@ export class InMemoryProductRepository implements ProductRepositoryInterface {
           : "LOWSTOCK";
 
     return new ProductEntity({
-      id: new IdObject(index + 1),
+      id: index + 1,
       name,
       code,
       description: faker.lorem.sentences({ min: 2, max: 5 }),
-      price: new PriceObject(
-        Number(faker.commerce.price({ min: 50, max: 5000 }))
-      ),
-      category: new CategoryEntity({
-        id: new IdObject(
-          faker.number.int({ min: 1, max: this.categoryNames.length - 1 })
-        ),
+      price: Number(faker.commerce.price({ min: 50, max: 5000 })),
+      category: {
+        id: faker.number.int({ min: 1, max: this.categoryNames.length - 1 }),
         name: category,
-      }),
+      },
       quantity,
       image,
       internalReference:
         faker.commerce.productAdjective() +
         " " +
         faker.commerce.productMaterial(),
-      shellId: new IdObject(faker.number.int({ min: 100, max: 999 })),
+      shellId: faker.number.int({ min: 100, max: 999 }),
       inventoryStatus,
       rating: faker.number.int({ min: 0, max: 5 }),
       createdAt: faker.date.past().getTime(),

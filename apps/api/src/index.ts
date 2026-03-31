@@ -1,16 +1,30 @@
-import { env } from "$config";
+import { AppContext, config } from "$config";
 import { apiController } from "$controllers";
 import { Hono } from "hono";
+import { cors } from 'hono/cors';
 
-const app = new Hono();
+const app = new Hono<AppContext>();
 
 app
+.use(
+  cors({
+    origin: config.allowedHost,
+  })
+)
+.use("*", (c, next) => {
+    if (c.req.path.startsWith("/api")) {
+      return next();
+    }
+    // SPA redirect to /index.html
+    const requestUrl = new URL(c.req.raw.url);
+    return c.env.ASSETS.fetch(new URL("/index.html", requestUrl.origin));
+  })
   .get("/", (c) => {
-    return c.text("Hello Hono!");
+    return c.redirect("/api");
   })
   .route("/api", apiController);
 
-const port = env.PORT;
+const port = config.port;
 console.log(`Server is running on port ${port}`);
 
 export default {

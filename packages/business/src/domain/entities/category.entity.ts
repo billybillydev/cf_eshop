@@ -5,16 +5,12 @@ export class CategoryEntity {
   readonly id: IdObject;
   readonly name: string;
 
-  constructor(categoryData: { id: IdObject; name: string }) {
-    this.id = categoryData.id;
-    this.name = categoryData.name;
+  constructor(dto: CategoryDTO) {
+    this.id = new IdObject(dto.id);
+    this.name = dto.name;
   }
 
   transformToDTO(): CategoryDTO {
     return { id: this.id.value(), name: this.name };
-  }
-
-  static transformToEntity(categoryDTO: CategoryDTO): CategoryEntity {
-    return new CategoryEntity({ ...categoryDTO, id: new IdObject(categoryDTO.id) });
   }
 }

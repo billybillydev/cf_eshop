@@ -1,18 +1,22 @@
-import { db } from "$db";
+import { AppBindings } from "$config/bindings";
 import { Category } from "$db/schemas/category.schema";
+import { D1DBRepository } from "$infrastructure/repositories/d1-db.repository";
 import { CategoryEntity } from "@eshop/business/domain/entities";
 import { IdObject } from "@eshop/business/domain/value-objects";
 import { CategoryRepositoryInterface } from "@eshop/business/infrastructure/ports";
 
+export class CategoryRepository extends D1DBRepository implements CategoryRepositoryInterface {
+  constructor(bindingName: AppBindings["DB"]) {
+    super(bindingName);
+  }
 
-export class CategoryRepository implements CategoryRepositoryInterface {
   async getAll(): Promise<CategoryEntity[]> {
     try {
-      const res = await db.query.categorySchema.findMany();
+      const res = await this.db.query.categorySchema.findMany();
       return res.map(this.convertModelToEntity);
     } catch (error) {
-        console.error(error);
-        return [];
+      console.error("Error fetching categories:", error);
+      return [];
     }
   }
 
@@ -22,8 +26,8 @@ export class CategoryRepository implements CategoryRepositoryInterface {
 
   private convertModelToEntity(category: Category): CategoryEntity {
     return new CategoryEntity({
-      id: new IdObject(category.id),
-      name: category.name
+      id: category.id,
+      name: category.name,
     });
   }
 }

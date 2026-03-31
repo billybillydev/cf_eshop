@@ -1,10 +1,10 @@
 import {
   CartDTO,
-  transformToEntity,
 } from "@eshop/business/domain/dtos";
 import {
   CartEntity,
-  ProductEntity,
+  CartItemEntity,
+  CartItemProductEntity
 } from "@eshop/business/domain/entities";
 import { IdObject } from "@eshop/business/domain/value-objects";
 import { CartRepositoryInterface } from "@eshop/business/infrastructure/ports";
@@ -19,8 +19,11 @@ export class CartApiRepository implements CartRepositoryInterface {
   constructor(honoContext: Context, cartDTO?: CartDTO) {
     this.honoContext = honoContext;
     this.cart = cartDTO
-      ? transformToEntity(cartDTO)
+      ? new CartEntity(cartDTO)
       : new CartEntity();
+  }
+  getCartItemByProductId(productId: IdObject): Promise<CartItemEntity | null> {
+    throw new Error("Method not implemented.");
   }
 
   async getCart(): Promise<CartEntity> {
@@ -28,17 +31,20 @@ export class CartApiRepository implements CartRepositoryInterface {
 
     const cartData = cartCookie ? (JSON.parse(cartCookie) as CartDTO) : null;
     if (cartData) {
-      this.cart = transformToEntity(cartData);
+      this.cart = new CartEntity(cartData);
     }
     return Promise.resolve(this.cart);
   }
 
   async addToCart(
-    product: ProductEntity,
+    product: CartItemProductEntity,
     quantity: number = 1
   ): Promise<CartEntity> {
     this.cart = await this.getCart();
     this.cart.addItem(product, quantity);
+
+    const cartDTO = this.cart.transformToDTO();
+    setCookie(this.honoContext, this.cartCookieKey, JSON.stringify(cartDTO));
 
     return Promise.resolve(this.cart);
   }
@@ -66,10 +72,6 @@ export class CartApiRepository implements CartRepositoryInterface {
     this.cart.updateItemQuantity(productId, quantity);
 
     const cartDTO = this.cart.transformToDTO();
-    console.log(
-      "in cart api repository updateItemQuantityInCart",
-      JSON.stringify(this.honoContext.req.header())
-    );
     setCookie(this.honoContext, this.cartCookieKey, JSON.stringify(cartDTO));
 
     return Promise.resolve(this.cart);

@@ -1,16 +1,14 @@
-import { type Config } from "drizzle-kit";
-import { config } from "./src/config"
-
-const dbCredentials = {
-  url: config.db.url,
-};
+import { Config } from "drizzle-kit";
+import { config } from "./src/config";
 
 export default {
+  schema: "./src/db/schemas",
+  out: ".drizzle-out",
   dialect: "sqlite",
-  schema: "./src/db/schemas/index.ts",
-  out: "./migrations",
-  dbCredentials,
-  verbose: false,
-  strict: true,
-  tablesFilter: ["!libsql_wasm_func_table"],
+  driver: "d1-http",
+  dbCredentials: {
+    accountId: config.db.accountId,
+    databaseId: config.db.databaseId,
+    token: config.db.token,
+  },
 } satisfies Config;

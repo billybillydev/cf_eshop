@@ -1,0 +1,38 @@
+{
+  "name": "@eshop/next",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@eshop/application": "*",
+    "@eshop/business": "*",
+    "@eshop/css": "*",
+    "@mosidev/dat": "^2.3.0",
+    "@t3-oss/env-core": "^0.10.1",
+    "clsx": "^2.1.1",
+    "hono": "^4.7.11",
+    "next": "^14.2.35",
+    "qs": "^6.13.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-toastify": "^10.0.5",
+    "zod": "^3.25.49"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/react": "~18.2.45",
+    "@types/react-dom": "~18.2.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.11",
+    "typescript": "^5.6.2"
+  }
+}

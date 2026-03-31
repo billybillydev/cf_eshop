@@ -24,7 +24,7 @@ describe("ShowProductsUseCase without paginate and/or filter parameters", () => 
 describe("ShowProductsUseCase with filters parameters", () => {
   it("should filter products by category and return empty product list for selected category", async () => {
     const nonExistedCategoryInProduct = new CategoryEntity({
-      id: new IdObject(73),
+      id: 73,
       name: "does not exist",
     });
     const filterProductsUseCase = new ShowProductsUseCase(productRepository);
@@ -38,7 +38,7 @@ describe("ShowProductsUseCase with filters parameters", () => {
 
   it("should filter products by category and only return products with selected category", async () => {
     const category = new CategoryEntity({
-      id: new IdObject(1),
+      id: 1,
       name: "computers",
     });
     const filterProductsUseCase = new ShowProductsUseCase(productRepository);

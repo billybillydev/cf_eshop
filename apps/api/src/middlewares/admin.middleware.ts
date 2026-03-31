@@ -1,12 +1,11 @@
+import { AppContext } from "$config";
 import { AppVariables } from "$config/variables";
-import { UserRepository } from "$infrastructure/repositories/user.repository";
-import { UserDTO } from "@eshop/business/domain/dtos";
-import { IsUserAdminUseCase } from "@eshop/business/domain/usecases/user";
+import { CustomerRepository } from "$infrastructure/repositories/customer.repository";
+import { CustomerDTO } from "@eshop/business/domain/dtos";
+import { IsUserAdminUseCase } from "@eshop/business/domain/usecases/customer";
 import { MiddlewareHandler } from "hono";
 
-export const adminMiddleware: MiddlewareHandler<{
-  Variables: AppVariables;
-}> = async (c, next) => {
+export const adminMiddleware: MiddlewareHandler<AppContext> = async (c, next) => {
   console.log("in admin middleware");
   try {
     const payload = c.get("jwtPayload");
@@ -17,10 +16,10 @@ export const adminMiddleware: MiddlewareHandler<{
     }
 
     if (payload && "user" in payload) {
-      const userRepository = new UserRepository();
+      const userRepository = new CustomerRepository(c.env.DB);
       const isUserAdmibUseCase = new IsUserAdminUseCase(userRepository);
       const isAdmin = await isUserAdmibUseCase.execute(
-        (payload.user as UserDTO).email
+        (payload.user as CustomerDTO).email
       );
       if (!isAdmin) {
         console.error("User is not admin")
