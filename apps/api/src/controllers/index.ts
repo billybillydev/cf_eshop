@@ -3,6 +3,7 @@ import { authController } from "$controllers/auth/auth.controller";
 import { cartApiController } from "$controllers/cart/cart.controller";
 import { categoryApiController } from "$controllers/category/category.controller";
 import { checkoutApiController } from "$controllers/checkout/checkout.controller";
+import { favoriteApiController } from "$controllers/favorite/favorite.controller";
 import { productApiController } from "$controllers/product/product.controller";
 import { Hono } from "hono";
 
@@ -11,6 +12,7 @@ export const apiController = new Hono()
   .route("/cart", cartApiController)
   .route("/categories", categoryApiController)
   .route("/checkout", checkoutApiController)
+  .route("/favorites", favoriteApiController)
   .route("/products", productApiController)
   .route("/authenticate", authController)
   .route("/admin", adminController);
