@@ -8,5 +8,6 @@ export type CustomerDTO = {
     password: ReturnType<CustomerEntity["password"]["toString"]>,
     createdAt?: CustomerEntity["createdAt"],
     updatedAt?: CustomerEntity["updatedAt"],
-    orders: CustomerEntity["orders"]
+    orders: CustomerEntity["orders"],
+    favorites: CustomerEntity["favorites"]
 }

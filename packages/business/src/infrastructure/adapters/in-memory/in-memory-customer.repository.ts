@@ -57,6 +57,8 @@ export class InMemoryCustomerRepository implements CustomerRepositoryInterface {
           customerData.password
         )
       ).toString(),
+      orders: [],
+      favorites: [],
     });
     this.customers.push(customer);
 
