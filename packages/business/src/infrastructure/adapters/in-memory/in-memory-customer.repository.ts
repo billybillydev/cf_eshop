@@ -48,7 +48,7 @@ export class InMemoryCustomerRepository implements CustomerRepositoryInterface {
       }
     }
 
-    const customer = new CustomerEntity({
+    const customer = CustomerEntity.build({
       ...customerData,
       id: this.customers.length + 1,
       email: customerData.email,
@@ -57,8 +57,6 @@ export class InMemoryCustomerRepository implements CustomerRepositoryInterface {
           customerData.password
         )
       ).toString(),
-      orders: [],
-      favorites: [],
     });
     this.customers.push(customer);
 

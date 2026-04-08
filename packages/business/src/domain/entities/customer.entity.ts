@@ -1,4 +1,4 @@
-import { CustomerDTO } from "$domain/dtos/customer";
+import { CreateCustomerDTO, CustomerDTO } from "$domain/dtos/customer";
 import { FavoriteEntity } from "$domain/entities/favorite";
 import { OrderEntity } from "$domain/entities/order";
 import { EmailObject, IdObject, PasswordObject } from "$domain/value-objects";
@@ -43,11 +43,15 @@ export class CustomerEntity {
     };
   }
 
-  // async hashPassword(password: string): Promise<void> {
-  //   this.password = await this.password.hash(password);
-  // }
-
-  static transformToEntity(customerDTO: CustomerDTO): CustomerEntity {
-    return new CustomerEntity(customerDTO);
+  static build(dto: CreateCustomerDTO & { id: number }): CustomerEntity {
+    return new CustomerEntity({
+      id: dto.id,
+      username: dto.username,
+      firstname: dto.firstname,
+      email: dto.email,
+      password: dto.password,
+      orders: [],
+      favorites: [],
+    });
   }
 }
