@@ -1,55 +1,62 @@
 import { AppContext } from "$config";
-import { favoriteRepositoryMiddleware } from "$middlewares/favorite-repository.middleware";
+import { CustomerRepository } from "$infrastructure/repositories/customer.repository";
+import { FavoriteRepository } from "$infrastructure/repositories/favorite.repository";
+import { ProductRepository } from "$infrastructure/repositories/product.repository";
+import { jwtMiddleware } from "$middlewares/jwt.middleware";
+import { tokenMiddleware } from "$middlewares/token.middleware";
 import {
-  AddFavoriteUseCase,
+  AddProductToCustomerFavoriteUseCase,
   DeleteFavoriteUseCase,
-  GetFavoritesUseCase,
-} from "@eshop/business/domain/usecases/favorite";
-import { IdObject } from "@eshop/business/domain/value-objects";
+  GetCustomerFavoritesUseCase,
+} from "@eshop/business/domain/usecases/customer";
+
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
 
 export const favoriteApiController = new Hono<AppContext>()
-  .use(favoriteRepositoryMiddleware)
-  .get(
-    "/:customerId",
-    zValidator(
-      "param",
-      z.object({
-        customerId: z.coerce.number(),
-      })
-    ),
-    async (ctx) => {
-      const { customerId } = ctx.req.valid("param");
-      const repository = ctx.get("favoriteRepository");
-      const useCase = new GetFavoritesUseCase(repository);
+  .use(tokenMiddleware)
+  .use(jwtMiddleware)
+  .get("/", async (ctx) => {
+    const jwtPayload = ctx.get("jwtPayload");
+    const customerId = jwtPayload.user.id;
+    const favoriteRepository = new FavoriteRepository(ctx.env.DB);
 
-      const favorites = await useCase.execute(new IdObject(customerId));
+    const useCase = new GetCustomerFavoritesUseCase(favoriteRepository);
 
-      return ctx.json(favorites.map((f) => f.transformToDTO()));
-    }
-  )
+    const favorites = await useCase.execute({ customerId });
+
+    return ctx.json(favorites.map((f) => f.transformToDTO()));
+  })
   .post(
     "/",
     zValidator(
       "json",
       z.object({
         productId: z.number(),
-        customerId: z.number(),
-        productImage: z.string(),
-        inventoryStatus: z.enum(["INSTOCK", "LOWSTOCK", "OUTOFSTOCK"]),
       })
     ),
     async (ctx) => {
       try {
-        const body = ctx.req.valid("json");
-        const repository = ctx.get("favoriteRepository");
-        const useCase = new AddFavoriteUseCase(repository);
+        const jwtPayload = ctx.get("jwtPayload");
+        const customerId = jwtPayload.user.id;
+        const { productId } = ctx.req.valid("json");
+        const customerRepository = new CustomerRepository(ctx.env.DB);
+        const productRepository = new ProductRepository(ctx.env.DB);
+        const favoriteRepository = new FavoriteRepository(ctx.env.DB);
 
-        const favorite = await useCase.execute(body);
+        const useCase = new AddProductToCustomerFavoriteUseCase(
+          customerRepository,
+          productRepository,
+          favoriteRepository
+        );
 
-        return ctx.json(favorite.transformToDTO(), 201);
+        const result = await useCase.execute({
+          customerId,
+          productId,
+        });
+
+        return ctx.json(result, 200);
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Failed to add favorite";
@@ -60,28 +67,40 @@ export const favoriteApiController = new Hono<AppContext>()
   .delete(
     "/",
     zValidator(
-      "json",
+      "query",
       z.object({
-        customerId: z.number(),
-        productId: z.number(),
+        productId: z.coerce.number(),
       })
     ),
     async (ctx) => {
       try {
-        const { customerId, productId } = ctx.req.valid("json");
-        const repository = ctx.get("favoriteRepository");
-        const useCase = new DeleteFavoriteUseCase(repository);
+        const { productId } = ctx.req.valid("query");
+        const jwtPayload = ctx.get("jwtPayload");
+        const customerId = jwtPayload.user.id;
+        const customerRepository = new CustomerRepository(ctx.env.DB);
+        const productRepository = new ProductRepository(ctx.env.DB);
+        const favoriteRepository = new FavoriteRepository(ctx.env.DB);
 
-        const deleted = await useCase.execute(
-          new IdObject(customerId),
-          new IdObject(productId)
+        const useCase = new DeleteFavoriteUseCase(
+          customerRepository,
+          productRepository,
+          favoriteRepository
         );
 
-        return ctx.json(deleted.transformToDTO());
+        const result = await useCase.execute({
+          customerId,
+          productId,
+        });
+
+        if (!result) {
+          return ctx.json({ error: "Favorite not found" }, 404);
+        }
+
+        return ctx.json(result);
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Failed to delete favorite";
-        return ctx.json({ error: message }, 404);
+        return ctx.json({ error: message }, 500);
       }
     }
   );

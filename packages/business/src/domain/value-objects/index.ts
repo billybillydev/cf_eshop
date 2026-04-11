@@ -8,3 +8,5 @@ export * from "$domain/value-objects/refund.value-object";
 export * from "$domain/value-objects/delivery-method.value-object";
 export * from "$domain/value-objects/person.value-object";
 export * from "$domain/value-objects/duration.value-object";
+export * from "$domain/value-objects/favorite.value-object";
+

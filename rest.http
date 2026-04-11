@@ -24,7 +24,7 @@ content-type: application/json
     "image": "https://loremflickr.com/cache/resized/defaultImage.small_640_480_nofilter.jpg"
 }
 
-@bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6InQxIiwiZmlyc3RuYW1lIjoiVGVzdCAxIiwiZW1haWwiOiJ0MUB0LmNvbSJ9LCJleHAiOjE3NzAwOTc2NDR9.poA6rshTkRhN4MIBlkLjEeqrCI9GkhP82p11-NX7Syk"
+@bearerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6InQxIiwiZmlyc3RuYW1lIjoiVGVzdCAxIiwiZW1haWwiOiJ0MUB0LmNvbSIsIm9yZGVycyI6W10sImZhdm9yaXRlcyI6W119LCJleHAiOjE3NzU5MTEwMzR9.L16sQUzATWXsXUtBOXaHbZLXj0lJB6gtSymm7o54Ies
 
 ### Get Product list
 GET {{apiUrl}}/products
@@ -115,3 +115,22 @@ content-type: application/json
 
 ### Logout user
 DELETE {{apiUrl}}/authenticate/logout
+
+
+### Get user favorites
+GET {{apiUrl}}/favorites
+Authorization: Bearer {{bearerToken}}
+
+### Add product to favorites
+POST {{apiUrl}}/favorites
+Authorization: Bearer {{bearerToken}}
+content-type: application/json
+
+{
+    "productId": 13
+}
+
+
+### Remove product from favorites
+DELETE {{apiUrl}}/favorites?productId=3
+Authorization: Bearer {{bearerToken}}

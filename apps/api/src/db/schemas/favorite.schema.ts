@@ -1,19 +1,23 @@
 import { customerSchema } from "$db/schemas/customer.schema";
 import { productSchema } from "$db/schemas/product.schema";
 import { relations } from "drizzle-orm";
-import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
+import { integer, primaryKey, sqliteTable } from "drizzle-orm/sqlite-core";
 
-export const favoriteSchema = sqliteTable("favorites", {
-  id: integer().primaryKey({ autoIncrement: true }),
-  productId: integer("product_id")
-    .notNull()
-    .references(() => productSchema.id),
-  customerId: integer("customer_id")
-    .notNull()
-    .references(() => customerSchema.id),
-  productImage: text("product_image").notNull(),
-  inventoryStatus: text("inventory_status").notNull(),
-});
+export const favoriteSchema = sqliteTable(
+  "favorites",
+  {
+    productId: integer("product_id")
+      .notNull()
+      .references(() => productSchema.id),
+    customerId: integer("customer_id")
+      .notNull()
+      .references(() => customerSchema.id),
+    createdAt: integer("created_at")
+      .notNull()
+      .$defaultFn(() => Date.now()),
+  },
+  (table) => [primaryKey({ columns: [table.customerId, table.productId] })]
+);
 
 export const favoriteRelations = relations(favoriteSchema, ({ one }) => ({
   product: one(productSchema, {

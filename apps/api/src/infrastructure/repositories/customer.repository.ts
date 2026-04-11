@@ -1,11 +1,13 @@
 import { config } from "$config";
 import { AppBindings } from "$config/bindings";
-import { Customer, customerSchema } from "$db/schemas/customer.schema";
+import { customerSchema } from "$db/schemas/customer.schema";
 import { D1DBRepository } from "$infrastructure/repositories/d1-db.repository";
-import { CreateCustomerDTO } from "@eshop/business/domain/dtos";
+import { CreateCustomerDTO, CustomerDTO } from "@eshop/business/domain/dtos";
 import { CustomerEntity } from "@eshop/business/domain/entities";
 import {
   EmailObject,
+  FavoriteVO,
+  IdObject,
   PasswordObject,
 } from "@eshop/business/domain/value-objects";
 import { CustomerRepositoryInterface } from "@eshop/business/infrastructure/ports";
@@ -17,6 +19,42 @@ export class CustomerRepository
 {
   constructor(bindingName: AppBindings["DB"]) {
     super(bindingName);
+  }
+
+  async getById(id: IdObject): Promise<CustomerEntity | null> {
+    try {
+      const customer = await this.db
+        .select()
+        .from(customerSchema)
+        .where(eq(customerSchema.id, id.value()))
+        .get();
+
+      if (!customer) {
+        return Promise.resolve(null);
+      }
+
+      return CustomerEntity.build(customer);
+    } catch (error) {
+      console.error(error);
+      return Promise.resolve(null);
+    }
+  }
+
+  async update(
+    id: IdObject,
+    customerData: Partial<CustomerDTO>
+  ): Promise<CustomerEntity | null> {
+    try {
+      await this.db
+        .update(customerSchema)
+        .set(customerData)
+        .where(eq(customerSchema.id, id.value()));
+
+      return this.getById(id);
+    } catch (error) {
+      console.error(error);
+      return Promise.resolve(null);
+    }
   }
 
   async isAdmin(email: EmailObject): Promise<boolean> {
@@ -47,29 +85,21 @@ export class CustomerRepository
         return Promise.resolve(null);
       }
 
-      const {
-        results: [customer],
-      } = await this.db
-        .select()
-        .from(customerSchema)
-        .where((fields) => eq(fields.email, email.toString()))
-        .limit(1)
-        .run();
+      const customerData = await this.db.query.customerSchema.findFirst({
+        where: (fields, { eq }) => eq(fields.email, email.toString()),
+      });
 
-      if (!customer) {
+      if (!customerData) {
         return Promise.resolve(null);
       }
 
-      console.log("In getByEmail : ", JSON.stringify(customer, null, 2));
+      const customer = CustomerEntity.build(customerData);
 
-      const customerEntity = new CustomerEntity(customer);
-
-      if (!(await customerEntity.password.verify(password))) {
-        console.log("\n\nverification failed\n\n");
-        return Promise.resolve(null);
+      if (!(await customer.password.verify(password))) {
+        throw new Error("Password verification failed");
       }
 
-      return Promise.resolve(customerEntity);
+      return Promise.resolve(customer);
     } catch (error) {
       console.error(error);
       return Promise.resolve(null);
@@ -83,7 +113,6 @@ export class CustomerRepository
       new EmailObject(customerData.email),
       customerData.password
     );
-    console.log("In create : ", existingCustomer)
     if (existingCustomer) {
       console.error("User already exists");
       return Promise.resolve(null);
@@ -101,12 +130,6 @@ export class CustomerRepository
       })
       .returning();
 
-    return this.convertModelToEntity(createdCustomer);
-  }
-
-  private async convertModelToEntity(
-    customer: Customer
-  ): Promise<CustomerEntity> {
-    return new CustomerEntity(customer);
+    return CustomerEntity.build(createdCustomer);
   }
 }

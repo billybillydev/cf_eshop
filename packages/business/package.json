@@ -58,10 +58,6 @@
       "import": "./dist/domain/usecases/customer/index.js",
       "require": "./dist/domain/usecases/customer/index.cjs"
     },
-    "./domain/usecases/favorite": {
-      "import": "./dist/domain/usecases/favorite/index.js",
-      "require": "./dist/domain/usecases/favorite/index.cjs"
-    },
     "./infrastructure/adapters/in-memory": {
       "import": "./dist/infrastructure/adapters/in-memory/index.js",
       "require": "./dist/infrastructure/adapters/in-memory/index.cjs"
