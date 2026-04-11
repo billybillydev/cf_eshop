@@ -1,9 +1,20 @@
-import { AddFavoriteDTO } from "$domain/dtos/favorite";
-import { FavoriteEntity } from "$domain/entities";
-import { IdObject } from "$domain/value-objects";
+import { FavoriteVO, IdObject } from "$domain/value-objects";
+
+export type ResultResponse = {
+  success: true;
+} | {
+  success: false;
+  message: string;
+};
 
 export interface FavoriteRepositoryInterface {
-  add(data: AddFavoriteDTO): Promise<FavoriteEntity>;
-  delete(customerId: IdObject, productId: IdObject): Promise<FavoriteEntity>;
-  getAll(customerId: IdObject): Promise<FavoriteEntity[]>;
+  getAllByCustomerId(customerId: IdObject): Promise<Array<FavoriteVO>>;
+  add(
+    customerId: IdObject,
+    favorite: FavoriteVO
+  ): Promise<ResultResponse>;
+  remove(
+    customerId: IdObject,
+    productId: IdObject
+  ): Promise<ResultResponse>;
 }

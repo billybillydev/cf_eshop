@@ -1,40 +1,64 @@
-import { AddFavoriteDTO } from "$domain/dtos/favorite";
-import { FavoriteEntity } from "$domain/entities";
-import { IdObject } from "$domain/value-objects";
-import type { FavoriteRepositoryInterface } from "$infrastructure/ports";
+import { CustomerDTO, CustomerFavoriteDTO } from "$domain/dtos";
+import { FavoriteVO, IdObject } from "$domain/value-objects";
+import {
+  FavoriteRepositoryInterface,
+  ResultResponse,
+} from "$infrastructure/ports/favorite.repository.interface";
 
 export class InMemoryFavoriteRepository implements FavoriteRepositoryInterface {
-  private store: FavoriteEntity[] = [];
+  favorites: Array<{ customerId: CustomerDTO["id"] } & CustomerFavoriteDTO> =
+    [];
 
-  async add(data: AddFavoriteDTO): Promise<FavoriteEntity> {
-    const exists = this.store.some(
-      (f) =>
-        f.customerId.equals(new IdObject(data.customerId)) &&
-        f.productId.equals(new IdObject(data.productId))
-    );
-    if (exists) {
-      throw new Error("Favorite already exists");
-    }
-    const id = this.store.length + 1;
-    const favorite = new FavoriteEntity({ ...data, id });
-    this.store.push(favorite);
-    return Promise.resolve(favorite);
-  }
-
-  async delete(customerId: IdObject, productId: IdObject): Promise<FavoriteEntity> {
-    const index = this.store.findIndex(
-      (f) => f.customerId.equals(customerId) && f.productId.equals(productId)
-    );
-    if (index < 0) {
-      throw new Error("Favorite not found");
-    }
-    const [removed] = this.store.splice(index, 1);
-    return Promise.resolve(removed);
-  }
-
-  async getAll(customerId: IdObject): Promise<FavoriteEntity[]> {
+  getAllByCustomerId(customerId: IdObject): Promise<Array<FavoriteVO>> {
     return Promise.resolve(
-      this.store.filter((f) => f.customerId.equals(customerId))
+      this.favorites
+        .filter((favorite) => favorite.customerId === customerId.value())
+        .map(({ customerId, ...restFavorite }) => new FavoriteVO(restFavorite))
     );
+  }
+
+  add(
+    customerId: IdObject,
+    favorite: FavoriteVO
+  ): Promise<ResultResponse> {
+    if (
+      this.favorites.some(
+        (f) =>
+          f.customerId === customerId.value() &&
+          f.productId === favorite.productId.value()
+      )
+    ) {
+      return Promise.resolve({
+        success: false,
+        message: "Product is already in favorites",
+      });
+    }
+
+    this.favorites.push({
+      customerId: customerId.value(),
+      ...favorite.transformToDTO(),
+    });
+
+    return Promise.resolve({ success: true });
+  }
+
+  remove(
+    customerId: IdObject,
+    productId: IdObject
+  ): Promise<ResultResponse> {
+    const favoriteIndex = this.favorites.findIndex(
+      (fav) =>
+        fav.customerId === customerId.value() &&
+        fav.productId === productId.value()
+    );
+    if (favoriteIndex === -1) {
+      return Promise.resolve({
+        success: false,
+        message: "Product is not in favorites",
+      });
+    }
+
+    this.favorites.splice(favoriteIndex, 1);
+    return Promise.resolve({ success: true });
   }
 }

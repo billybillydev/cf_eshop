@@ -54,7 +54,7 @@ export class ProductRepository extends D1DBRepository implements ProductReposito
         with: { category: true },
       });
 
-      return res.map(this.convertModelToItemEntity);;
+      return res.map(this.convertModelToItemEntity);
     } catch (error) {
       console.error(error);
       return [];
@@ -217,7 +217,6 @@ export class ProductRepository extends D1DBRepository implements ProductReposito
   }
 
   private async getProductByIdOrFail(objectId: { id: number } | undefined, errorMessage: string): Promise<ProductEntity> {
-    console.log({objectId});
     if (!objectId) {
       throw new Error(errorMessage);
     }

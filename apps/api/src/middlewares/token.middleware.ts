@@ -6,9 +6,11 @@ import { bearerAuth } from "hono/bearer-auth";
 export const tokenMiddleware: MiddlewareHandler<{
   Variables: AppVariables;
 }> = async (c, next) => {
-  const token = getCookie(c, "jwtPayload");
-  if (token) {
-    bearerAuth({ token })
-  }
-  await next();
+  const bearer = bearerAuth({
+    verifyToken(token, c) {
+      const cookieToken = getCookie(c, "jwtPayload");
+      return cookieToken === token;
+    },
+  });
+  return bearer(c, next);
 };

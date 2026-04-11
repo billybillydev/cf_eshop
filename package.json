@@ -9,9 +9,13 @@
     "build:business": "bun run --filter @eshop/business build",
     "build:packages": "bun run --filter './packages/*' build",
     "build": "bun run '*' build",
-    "dev": "bun run --filter './apps/*' dev",
+    "dev": "bun run --parallel dev:api dev:react",
     "dev:api": "bun --filter @eshop/api dev",
     "dev:react": "bun --filter @eshop/react dev",
+    "deploy:api": "bun --filter @eshop/api deploy",
+    "build:react": "bun --filter @eshop/react build",
+    "preview": "bun --sequential build:react dev:api",
+    "deploy": "bun --sequential build:react deploy:api",
     "lint": "bun run build:packages",
     "test": "bun run --filter '*' test",
     "test:react": "bun run --filter @eshop/react test",
@@ -29,9 +33,7 @@
     "db:migrate": "cd apps/api && bun db:migrate",
     "db:push": "cd apps/api && bun db:push",
     "db:seed": "cd apps/api && bun db:seed",
-    "clean": "bunx rimraf --glob **/node_modules",
-    "deploy:api": "fly deploy --app eshop-api --build-target api --config apps/api/fly.toml",
-    "deploy:react": "fly deploy --app eshop-react --build-target react --config apps/react/fly.toml"
+    "clean": "bunx rimraf --glob **/node_modules"
   },
   "husky": {
     "hooks": {

@@ -1,7 +1,7 @@
 import { CreateCustomerDTO, CustomerDTO } from "$domain/dtos/customer";
-import { FavoriteEntity } from "$domain/entities/favorite";
 import { OrderEntity } from "$domain/entities/order";
 import { EmailObject, IdObject, PasswordObject } from "$domain/value-objects";
+import { FavoriteVO } from "$domain/value-objects/favorite.value-object";
 
 export class CustomerEntity {
   id: IdObject;
@@ -12,7 +12,7 @@ export class CustomerEntity {
   readonly createdAt: number = Date.now();
   updatedAt: number = Date.now();
   orders: OrderEntity[] = [];
-  favorites: FavoriteEntity[] = [];
+  favorites: Array<FavoriteVO> = [];
 
   constructor(dto: CustomerDTO) {
     this.id = new IdObject(dto.id);
@@ -29,6 +29,8 @@ export class CustomerEntity {
       this.updatedAt = dto.updatedAt;
     }
     this.password = new PasswordObject(dto.password);
+    this.orders = dto.orders;
+    this.favorites = dto.favorites.map((favorite) => new FavoriteVO(favorite));
   }
 
   transformToDTO(): CustomerDTO {
@@ -39,7 +41,7 @@ export class CustomerEntity {
       email: this.email.toString(),
       password: this.password.toString(),
       orders: this.orders,
-      favorites: this.favorites,
+      favorites: this.favorites.map((favorite) => favorite.transformToDTO()),
     };
   }
 

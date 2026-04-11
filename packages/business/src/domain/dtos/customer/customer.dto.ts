@@ -1,3 +1,4 @@
+import { CustomerFavoriteDTO } from "$domain/dtos/customer/customer-favorite.dto"
 import { CustomerEntity } from "$domain/entities"
 
 export type CustomerDTO = {
@@ -9,5 +10,5 @@ export type CustomerDTO = {
     createdAt?: CustomerEntity["createdAt"],
     updatedAt?: CustomerEntity["updatedAt"],
     orders: CustomerEntity["orders"],
-    favorites: CustomerEntity["favorites"]
+    favorites: Array<CustomerFavoriteDTO>
 }

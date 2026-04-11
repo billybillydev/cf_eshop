@@ -1,6 +1,6 @@
-import { CreateCustomerDTO } from "$domain/dtos";
+import { CreateCustomerDTO, CustomerDTO } from "$domain/dtos";
 import { CustomerEntity } from "$domain/entities";
-import { EmailObject, PasswordObject } from "$domain/value-objects";
+import { EmailObject, FavoriteVO, IdObject, PasswordObject } from "$domain/value-objects";
 import { CustomerRepositoryInterface } from "$infrastructure/ports/customer.repository.interface";
 
 export class InMemoryCustomerRepository implements CustomerRepositoryInterface {
@@ -30,6 +30,14 @@ export class InMemoryCustomerRepository implements CustomerRepositoryInterface {
 
     return Promise.resolve(existingCustomer);
   }
+
+  async getById(id: IdObject): Promise<CustomerEntity | null> {
+    const existingCustomer = this.customers.find((customer) =>
+      customer.id.equals(id)
+    );
+    return Promise.resolve(existingCustomer || null);
+  }
+
   async create(
     customerData: CreateCustomerDTO
   ): Promise<CustomerEntity | null> {
@@ -53,14 +61,28 @@ export class InMemoryCustomerRepository implements CustomerRepositoryInterface {
       id: this.customers.length + 1,
       email: customerData.email,
       password: (
-        await new PasswordObject().hash(
-          customerData.password
-        )
+        await new PasswordObject().hash(customerData.password)
       ).toString(),
     });
     this.customers.push(customer);
 
     return Promise.resolve(customer);
+  }
+
+  async update(
+    id: IdObject,
+    customerData: Partial<CustomerDTO>
+  ): Promise<CustomerEntity | null> {
+    const existingCustomer = this.customers.find((customer) =>
+      customer.id.equals(id)
+    );
+    if (!existingCustomer) {
+      return Promise.resolve(null);
+    }
+    const dto = existingCustomer.transformToDTO();
+    Object.assign(dto, customerData);
+
+    return Promise.resolve(new CustomerEntity(dto));
   }
 
   async isAdmin(email: EmailObject): Promise<boolean> {
