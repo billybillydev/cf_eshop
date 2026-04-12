@@ -4,7 +4,47 @@
 @apiUrl = {{hostname}}:{{api_port}}/api
 
 
+# ------------- API User ------------- #
+
+### Get user
+# @name login
+POST {{apiUrl}}/authenticate/token
+content-type: application/json
+
+{
+    "email": "t1@t.com",
+    "password": "azerty1234"
+}
+
+
+### Get is user admin
+POST {{apiUrl}}/authenticate/admin
+content-type: application/json
+
+{
+    "email": "john@doe.com"
+}
+
+### Create user
+POST {{apiUrl}}/authenticate/account
+content-type: application/json
+
+{
+    "username": "t1",
+    "firstname": "Test 1",
+    "email": "t1@t.com",
+    "password": "azerty1234"
+}
+
+### Logout user
+DELETE {{apiUrl}}/authenticate/logout
+
+
+@bearerToken = {{login.response.body.token}}
+
+
 # ------------- API Product ------------- #
+
 
 ### Create a product
 POST {{apiUrl}}/products
@@ -24,7 +64,6 @@ content-type: application/json
     "image": "https://loremflickr.com/cache/resized/defaultImage.small_640_480_nofilter.jpg"
 }
 
-@bearerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6InQxIiwiZmlyc3RuYW1lIjoiVGVzdCAxIiwiZW1haWwiOiJ0MUB0LmNvbSIsIm9yZGVycyI6W10sImZhdm9yaXRlcyI6W119LCJleHAiOjE3NzU5MTEwMzR9.L16sQUzATWXsXUtBOXaHbZLXj0lJB6gtSymm7o54Ies
 
 ### Get Product list
 GET {{apiUrl}}/products
@@ -83,38 +122,8 @@ GET {{apiUrl}}/products/paginate?category=kids&productName=fr&page=1&limit=8
 ### Get Category list json
 GET {{apiUrl}}/categories
 
-# ------------- API User ------------- #
 
-### Get user
-POST {{apiUrl}}/authenticate/token
-content-type: application/json
-
-{
-    "email": "t1@t.com",
-    "password": "azerty1234"
-}
-
-### Get is user admin
-POST {{apiUrl}}/authenticate/admin
-content-type: application/json
-
-{
-    "email": "john@doe.com"
-}
-
-### Create user
-POST {{apiUrl}}/authenticate/account
-content-type: application/json
-
-{
-    "username": "t1",
-    "firstname": "Test 1",
-    "email": "t1@t.com",
-    "password": "azerty1234"
-}
-
-### Logout user
-DELETE {{apiUrl}}/authenticate/logout
+# ------------- API Favorite ------------- #
 
 
 ### Get user favorites
@@ -129,7 +138,6 @@ content-type: application/json
 {
     "productId": 13
 }
-
 
 ### Remove product from favorites
 DELETE {{apiUrl}}/favorites?productId=3

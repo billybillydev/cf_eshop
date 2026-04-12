@@ -1,14 +1,19 @@
-import { adminController } from "$controllers/admin/admin.controller";
-import { authController } from "$controllers/auth/auth.controller";
-import { cartApiController } from "$controllers/cart/cart.controller";
-import { categoryApiController } from "$controllers/category/category.controller";
-import { checkoutApiController } from "$controllers/checkout/checkout.controller";
-import { favoriteApiController } from "$controllers/favorite/favorite.controller";
-import { productApiController } from "$controllers/product/product.controller";
+import type { AppContext } from "$/config";
 import { Hono } from "hono";
+import { adminController } from "./admin/admin.controller";
+import { authController } from "./auth/auth.controller";
+import { cartApiController } from "./cart/cart.controller";
+import { categoryApiController } from "./category/category.controller";
+import { checkoutApiController } from "./checkout/checkout.controller";
+import { favoriteApiController } from "./favorite/favorite.controller";
+import { productApiController } from "./product/product.controller";
 
-export const apiController = new Hono()
-  .get("/", (ctx) => ctx.text("this is api"))
+export const apiController = new Hono<AppContext>();
+
+const routes = apiController
+  .get("/", (c) => {
+    return c.text("This is api !");
+  })
   .route("/cart", cartApiController)
   .route("/categories", categoryApiController)
   .route("/checkout", checkoutApiController)
@@ -16,3 +21,5 @@ export const apiController = new Hono()
   .route("/products", productApiController)
   .route("/authenticate", authController)
   .route("/admin", adminController);
+
+export type ApiRoutes = typeof routes;

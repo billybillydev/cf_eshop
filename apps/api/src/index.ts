@@ -1,17 +1,16 @@
-import { AppContext, config } from "$config";
-import { apiController } from "$controllers";
+
 import { Hono } from "hono";
-import { cors } from 'hono/cors';
+import { cors } from "hono/cors";
+import { config, type AppContext } from "$/config";
+import { apiController } from "./controllers";
 
-const app = new Hono<AppContext>();
-
-app
-.use(
-  cors({
-    origin: config.allowedHost,
-  })
-)
-.use("*", (c, next) => {
+const app = new Hono<AppContext>()
+  .use(
+    cors({
+      origin: config.allowedHost,
+    })
+  )
+  .use("*", (c, next) => {
     if (c.req.path.startsWith("/api")) {
       return next();
     }
@@ -25,6 +24,7 @@ app
   .route("/api", apiController);
 
 const port = config.port;
+
 console.log(`Server is running on port ${port}`);
 
 export default {

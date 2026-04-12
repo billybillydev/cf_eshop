@@ -1,18 +1,17 @@
-import { AppContext } from "$config";
-import { CustomerRepository } from "$infrastructure/repositories/customer.repository";
-import { FavoriteRepository } from "$infrastructure/repositories/favorite.repository";
-import { ProductRepository } from "$infrastructure/repositories/product.repository";
-import { jwtMiddleware } from "$middlewares/jwt.middleware";
-import { tokenMiddleware } from "$middlewares/token.middleware";
 import {
   AddProductToCustomerFavoriteUseCase,
   DeleteFavoriteUseCase,
   GetCustomerFavoritesUseCase,
 } from "@eshop/business/domain/usecases/customer";
-
+import type { AppContext } from "$/config";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
+import { CustomerRepository } from "$/infrastructure/repositories/customer.repository";
+import { FavoriteRepository } from "$/infrastructure/repositories/favorite.repository";
+import { ProductRepository } from "$/infrastructure/repositories/product.repository";
+import { jwtMiddleware } from "$/middlewares/jwt.middleware";
+import { tokenMiddleware } from "$/middlewares/token.middleware";
 
 export const favoriteApiController = new Hono<AppContext>()
   .use(tokenMiddleware)
@@ -60,7 +59,7 @@ export const favoriteApiController = new Hono<AppContext>()
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Failed to add favorite";
-        return ctx.json({ error: message }, 400);
+        return ctx.json({ error: message, success: false }, 400);
       }
     }
   )
@@ -92,15 +91,13 @@ export const favoriteApiController = new Hono<AppContext>()
           productId,
         });
 
-        if (!result) {
-          return ctx.json({ error: "Favorite not found" }, 404);
-        }
-
-        return ctx.json(result);
+        return ctx.json(result, 200);
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Failed to delete favorite";
-        return ctx.json({ error: message }, 500);
+        return ctx.json({ error: message, success: false }, 404);
       }
     }
   );
+
+  
