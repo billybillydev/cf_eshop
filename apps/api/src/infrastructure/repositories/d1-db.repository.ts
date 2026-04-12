@@ -1,5 +1,5 @@
-import { AppBindings } from "$config/bindings";
-import { db as $db } from "$db";
+import { AppBindings } from "$/config/bindings";
+import { db as $db } from "$/db";
 
 export class D1DBRepository {
   protected readonly db: ReturnType<typeof $db>;

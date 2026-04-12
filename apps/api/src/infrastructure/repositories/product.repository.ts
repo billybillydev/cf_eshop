@@ -1,7 +1,7 @@
-import { config } from "$config";
-import { AppBindings } from "$config/bindings";
-import { categorySchema, Product, productSchema } from "$db/schemas";
-import { D1DBRepository } from "$infrastructure/repositories/d1-db.repository";
+import { config } from "$/config";
+import { AppBindings } from "$/config/bindings";
+import { categorySchema, Product, productSchema } from "$/db/schemas";
+import { D1DBRepository } from "$/infrastructure/repositories/d1-db.repository";
 import {
   CreateProductDTO,
   UpdateProductDTO,

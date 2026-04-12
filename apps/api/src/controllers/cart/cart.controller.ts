@@ -1,5 +1,4 @@
-import type { AppContext } from "$config";
-import { config } from "$config";
+import { type AppContext, config } from "$/config";
 import { CartDTO } from "@eshop/business/domain/dtos";
 import { Context, Hono } from "hono";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
@@ -45,7 +44,7 @@ async function resolveCartKey(c: Context<AppContext>, setCookieFn?: (uuid: strin
   if (authHeader?.startsWith("Bearer ")) {
     try {
       const token = authHeader.slice(7);
-      const payload = await verify(token, config.jwtSecret);
+      const payload = await verify(token, config.jwtSecret, "ES256");
       if (payload && typeof payload === "object" && "user" in payload) {
         const user = payload.user as { id: number };
         return {

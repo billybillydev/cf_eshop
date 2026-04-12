@@ -1,6 +1,5 @@
-import { AppContext } from "$config";
-import { AppVariables } from "$config/variables";
-import { CustomerRepository } from "$infrastructure/repositories/customer.repository";
+import { AppContext } from "$/config";
+import { CustomerRepository } from "$/infrastructure/repositories/customer.repository";
 import { CustomerDTO } from "@eshop/business/domain/dtos";
 import { IsUserAdminUseCase } from "@eshop/business/domain/usecases/customer";
 import { MiddlewareHandler } from "hono";

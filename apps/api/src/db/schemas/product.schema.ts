@@ -1,4 +1,5 @@
-import { Category, categorySchema } from "$db/schemas/category.schema";
+import { Category, categorySchema } from "$/db/schemas/category.schema";
+
 import { relations } from "drizzle-orm";
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 

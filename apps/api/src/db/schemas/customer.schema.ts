@@ -1,4 +1,4 @@
-import { favoriteSchema } from "$db/schemas/favorite.schema";
+import { favoriteSchema } from "$/db/schemas/favorite.schema";
 import { CustomerFavoriteDTO } from "@eshop/business/domain/dtos";
 import { relations } from "drizzle-orm";
 import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";

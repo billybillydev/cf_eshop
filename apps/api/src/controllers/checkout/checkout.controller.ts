@@ -1,4 +1,4 @@
-import type { AppContext } from "$config";
+import type { AppContext } from "$/config";
 import { CheckoutValueObject } from "@eshop/business/domain/value-objects";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";

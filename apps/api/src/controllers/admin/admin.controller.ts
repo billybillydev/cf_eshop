@@ -1,12 +1,17 @@
-import { Hono } from "hono";
-import { AppContext } from "$config";
-import { ProductRepository } from "$infrastructure/repositories/product.repository";
-import { adminMiddleware } from "$middlewares/admin.middleware";
-import { tokenMiddleware } from "$middlewares/token.middleware";
-import { CreateProductUseCase, UpdateProductUseCase, RemoveProductUseCase } from "@eshop/business/domain/usecases/product";
+
+import { AppContext } from "$/config";
+import { ProductRepository } from "$/infrastructure/repositories/product.repository";
+import { adminMiddleware } from "$/middlewares/admin.middleware";
+import { jwtMiddleware } from "$/middlewares/jwt.middleware";
+import { tokenMiddleware } from "$/middlewares/token.middleware";
+import {
+  CreateProductUseCase,
+  RemoveProductUseCase,
+  UpdateProductUseCase,
+} from "@eshop/business/domain/usecases/product";
 import { IdObject } from "@eshop/business/domain/value-objects";
 import { zValidator } from "@hono/zod-validator";
-import { jwt } from "hono/jwt";
+import { Hono } from "hono";
 import z from "zod";
 
 const paramIdSchemaValidator = zValidator(
@@ -18,7 +23,7 @@ const paramIdSchemaValidator = zValidator(
 
 export const adminController = new Hono<AppContext>()
   .use(tokenMiddleware)
-  .use(jwt({ secret: "secret", cookie: "jwtPayload" }))
+  .use(jwtMiddleware)
   .use(adminMiddleware)
   .post(
     zValidator(
@@ -50,7 +55,6 @@ export const adminController = new Hono<AppContext>()
     }
   )
   .patch(
-    adminMiddleware,
     paramIdSchemaValidator,
     zValidator(
       "json",
@@ -86,7 +90,7 @@ export const adminController = new Hono<AppContext>()
       return ctx.json(product.transformToDTO());
     }
   )
-  .delete(adminMiddleware, paramIdSchemaValidator, async (ctx) => {
+  .delete(paramIdSchemaValidator, async (ctx) => {
     const { id } = ctx.req.valid("param");
 
     const productApiRepository = new ProductRepository(ctx.env.DB);
@@ -95,4 +99,3 @@ export const adminController = new Hono<AppContext>()
 
     return ctx.json(deletedProduct.transformToDTO());
   });
-;

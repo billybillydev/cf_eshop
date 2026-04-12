@@ -1,6 +1,6 @@
-import { AppBindings } from "$config/bindings";
-import { Category } from "$db/schemas/category.schema";
-import { D1DBRepository } from "$infrastructure/repositories/d1-db.repository";
+import { AppBindings } from "$/config/bindings";
+import { Category } from "$/db/schemas/category.schema";
+import { D1DBRepository } from "$/infrastructure/repositories/d1-db.repository";
 import { CategoryEntity } from "@eshop/business/domain/entities";
 import { IdObject } from "@eshop/business/domain/value-objects";
 import { CategoryRepositoryInterface } from "@eshop/business/infrastructure/ports";

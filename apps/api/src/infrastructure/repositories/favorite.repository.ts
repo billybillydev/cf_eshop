@@ -1,6 +1,7 @@
-import { AppBindings } from "$config/bindings";
-import { favoriteSchema } from "$db/schemas";
-import { D1DBRepository } from "$infrastructure/repositories/d1-db.repository";
+
+import { AppBindings } from "$/config/bindings";
+import { favoriteSchema } from "$/db/schemas";
+import { D1DBRepository } from "$/infrastructure/repositories/d1-db.repository";
 import { IdObject, FavoriteVO } from "@eshop/business/domain/value-objects";
 import {
   FavoriteRepositoryInterface,

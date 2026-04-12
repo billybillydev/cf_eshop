@@ -1,3 +1,6 @@
+import { AppContext, config } from "$/config";
+import { ProductRepository } from "$/infrastructure/repositories/product.repository";
+
 import { ProductItemEntity } from "@eshop/business/domain/entities";
 import {
   GetProductByCodeUseCase,
@@ -7,9 +10,6 @@ import {
 import { IdObject } from "@eshop/business/domain/value-objects";
 
 import { zValidator } from "@hono/zod-validator";
-
-import { AppContext, config } from "$config";
-import { ProductRepository } from "$infrastructure/repositories/product.repository";
 import { Hono } from "hono";
 import { z } from "zod";
 

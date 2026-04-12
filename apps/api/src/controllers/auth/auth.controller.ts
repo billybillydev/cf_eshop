@@ -1,5 +1,5 @@
-import { AppContext, config } from "$config";
-import { CustomerRepository } from "$infrastructure/repositories/customer.repository";
+import { AppContext, config } from "$/config";
+import { CustomerRepository } from "$/infrastructure/repositories/customer.repository";
 import { CustomerEntity } from "@eshop/business/domain/entities";
 import {
   CreateCustomerUseCase,

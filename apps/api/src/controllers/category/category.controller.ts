@@ -1,18 +1,18 @@
-import { AppContext } from "$config";
-import { CategoryRepository } from "$infrastructure/repositories/category.repository";
+
 import {
   GetAllCategoriesUseCase,
   GetCategoryByIdUseCase,
 } from "@eshop/business/domain/usecases/category";
 import { IdObject } from "@eshop/business/domain/value-objects";
-
+import type { AppContext } from "$/config";
 import { zValidator } from "@hono/zod-validator";
 
 import { Hono } from "hono";
 import { z } from "zod";
+import { CategoryRepository } from "$/infrastructure/repositories/category.repository";
 
 export const categoryApiController = new Hono<AppContext>()
-  .get(async (ctx) => {
+  .get("/", async (ctx) => {
     const categoryApiRepository = new CategoryRepository(ctx.env.DB);
     const getAllCategoriesUseCase = new GetAllCategoriesUseCase(
       categoryApiRepository

@@ -1,5 +1,5 @@
-import { customerSchema } from "$db/schemas/customer.schema";
-import { productSchema } from "$db/schemas/product.schema";
+import { customerSchema } from "$/db/schemas/customer.schema";
+import { productSchema } from "$/db/schemas/product.schema";
 import { relations } from "drizzle-orm";
 import { integer, primaryKey, sqliteTable } from "drizzle-orm/sqlite-core";
 

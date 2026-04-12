@@ -1,7 +1,8 @@
-import { config } from "$config";
-import { AppBindings } from "$config/bindings";
-import { customerSchema } from "$db/schemas/customer.schema";
-import { D1DBRepository } from "$infrastructure/repositories/d1-db.repository";
+import { config } from "$/config";
+import { AppBindings } from "$/config/bindings";
+import { customerSchema } from "$/db/schemas/customer.schema";
+import { D1DBRepository } from "$/infrastructure/repositories/d1-db.repository";
+
 import { CreateCustomerDTO, CustomerDTO } from "@eshop/business/domain/dtos";
 import { CustomerEntity } from "@eshop/business/domain/entities";
 import {
@@ -11,6 +12,7 @@ import {
   PasswordObject,
 } from "@eshop/business/domain/value-objects";
 import { CustomerRepositoryInterface } from "@eshop/business/infrastructure/ports";
+
 import { eq } from "drizzle-orm";
 
 export class CustomerRepository
