@@ -1,4 +1,4 @@
-import { useAuth } from "$pages/authentication/hooks";
+import { useAuth } from "$/pages/authentication/hooks";
 import {
     Navigate,
     Outlet

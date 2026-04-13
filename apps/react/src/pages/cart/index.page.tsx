@@ -1,5 +1,5 @@
-import { CartList, CartSummary, EmptyCart } from "$pages/cart/components";
-import { useCartContext } from "$pages/cart/hooks";
+import { CartList, CartSummary, EmptyCart } from "$/pages/cart/components";
+import { useCartContext } from "$/pages/cart/hooks";
 
 export function CartPage() {
   const { cart, loading, deleteItemFromCart } = useCartContext();

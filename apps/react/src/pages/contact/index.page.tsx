@@ -1,4 +1,4 @@
-import { useSendContactEmail } from "$pages/contact/hooks";
+import { useSendContactEmail } from "$/pages/contact/hooks";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";

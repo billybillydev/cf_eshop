@@ -1,6 +1,7 @@
-import { useAuth } from "$pages/authentication/hooks";
-import { useCartContext } from "$pages/cart/hooks";
-import { Logo } from "$shared/components/logo.components";
+
+import { useAuth } from "$/pages/authentication/hooks";
+import { useCartContext } from "$/pages/cart/hooks";
+import { Logo } from "$/shared/components/logo.components";
 import { useEffect, useRef, useState } from "react";
 import { NavLink, redirect, useLocation } from "react-router-dom";
 

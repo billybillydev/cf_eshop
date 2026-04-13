@@ -28,7 +28,7 @@ export const AuthContextProvider = ({ children }: PropsWithChildren) => {
     (async () => {
       if (token) {
         try {
-          await verify(token, import.meta.env.VITE_JWT_SECRET);
+          await verify(token, import.meta.env.VITE_JWT_SECRET, "HS256");
           localStorage.setItem("token", token);
         } catch (e) {
           // console.error(e);

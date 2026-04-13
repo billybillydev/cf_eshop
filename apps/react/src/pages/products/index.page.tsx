@@ -1,10 +1,10 @@
-import { DEFAULT_LIMITS, DEFAULT_PAGE } from "$config/variables";
+import { DEFAULT_LIMITS, DEFAULT_PAGE } from "$/config/variables";
 import {
   Filters,
   Pagination,
   ProductList
-} from "$pages/products/components";
-import { useDebounce, useProductsPagination } from "$pages/products/hooks";
+} from "$/pages/products/components";
+import { useDebounce, useProductsPagination } from "$/pages/products/hooks";
 import { CategoryEntity, ProductEntity } from "@eshop/business/domain/entities";
 import { ProductPaginationParameters } from "@eshop/business/infrastructure/ports";
 import React, { useEffect, useState } from "react";

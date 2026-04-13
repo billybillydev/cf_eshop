@@ -1,4 +1,4 @@
-import { Button } from "$shared/components/button.component";
+import { Button } from "$/shared/components/button.component";
 
 export function NotFoundPage() {
   return (

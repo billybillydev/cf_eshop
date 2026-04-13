@@ -1,5 +1,5 @@
-import { CategoryRepository } from "$infrastructure/repositories/category.repository";
-import { useAuth } from "$pages/authentication/hooks";
+import { CategoryRepository } from "$/infrastructure/repositories/category.repository";
+import { useAuth } from "$/pages/authentication/hooks";
 import { CategoryEntity } from "@eshop/business/domain/entities";
 import { GetAllCategoriesUseCase } from "@eshop/business/domain/usecases/category";
 import { Dispatch, SetStateAction, useState, useEffect } from "react";

@@ -3,7 +3,7 @@ import {
   Step1Values,
   Step2Values,
   Step3Values,
-} from "$pages/checkout/hooks";
+} from "$/pages/checkout/hooks";
 import clsx from "clsx";
 import type { ReactNode } from "react";
 

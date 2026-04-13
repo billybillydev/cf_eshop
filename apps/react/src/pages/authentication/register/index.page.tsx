@@ -1,6 +1,6 @@
-import { useAuth } from "$pages/authentication/hooks";
-import { useRegister } from "$pages/authentication/register/hooks";
-import clsx from "clsx";
+
+import { useAuth } from "$/pages/authentication/hooks";
+import { useRegister } from "$/pages/authentication/register/hooks";
 import { useState } from "react";
 import { redirect } from "react-router-dom";
 

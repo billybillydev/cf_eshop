@@ -1,5 +1,5 @@
-import { ProductRepository } from "$infrastructure/repositories/product.repository";
-import { useAuth } from "$pages/authentication/hooks";
+import { ProductRepository } from "$/infrastructure/repositories/product.repository";
+import { useAuth } from "$/pages/authentication/hooks";
 import {
   ProductEntity,
   ProductItemEntity,

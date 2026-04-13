@@ -1,5 +1,5 @@
-import { useCartContext } from "$pages/cart/hooks";
-import { Button } from "$shared/components/button.component";
+import { useCartContext } from "$/pages/cart/hooks";
+import { Button } from "$/shared/components/button.component";
 import { CartItemEntity } from "@eshop/business/domain/entities";
 
 export function ProductQuantityInCart({ item }: { item: CartItemEntity }) {

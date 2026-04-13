@@ -1,4 +1,4 @@
-import { JwtRepository } from "$infrastructure/repositories/jwt.repository";
+import { JwtRepository } from "$/infrastructure/repositories/jwt.repository";
 import { FetchApi } from "@eshop/application";
 import { CategoryDTO } from "@eshop/business/domain/dtos";
 import { CategoryEntity } from "@eshop/business/domain/entities";

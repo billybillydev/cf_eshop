@@ -1,8 +1,8 @@
-import { DEFAULT_PAGE } from "$config/variables";
-import { useCartContext } from "$pages/cart/hooks";
-import { useCategoryList } from "$pages/category/hooks";
-import { Button } from "$shared/components/button.component";
-import { ProductQuantityInCart } from "$shared/components/product-quantity-in-cart.component";
+import { DEFAULT_PAGE } from "$/config/variables";
+import { useCartContext } from "$/pages/cart/hooks";
+import { useCategoryList } from "$/pages/category/hooks";
+import { Button } from "$/shared/components/button.component";
+import { ProductQuantityInCart } from "$/shared/components/product-quantity-in-cart.component";
 import {
   CartItemEntity,
   CartItemProductEntity,

@@ -6,8 +6,8 @@ import {
   Step2Form,
   Step3Form,
   StepCard,
-} from "$pages/checkout/components";
-import { useCheckoutFlow } from "$pages/checkout/hooks";
+} from "$/pages/checkout/components";
+import { useCheckoutFlow } from "$/pages/checkout/hooks";
 
 export function CheckoutPage() {
   const {

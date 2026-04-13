@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { CartRepository } from "$infrastructure/repositories/cart.repository";
+import { CartRepository } from "$/infrastructure/repositories/cart.repository";
 import {
   CartEntity,
   CartItemEntity,
@@ -23,7 +23,7 @@ import {
   useState,
 } from "react";
 import { IdObject } from "@eshop/business/domain/value-objects";
-import { useAuth } from "$pages/authentication/hooks";
+import { useAuth } from "$/pages/authentication/hooks";
 
 type CartContextProps = {
   cart: CartEntity;

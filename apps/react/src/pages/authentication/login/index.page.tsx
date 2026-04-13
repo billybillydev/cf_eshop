@@ -1,5 +1,5 @@
-import { useAuth } from "$pages/authentication/hooks";
-import { useLogin } from "$pages/authentication/login/hooks";
+import { useAuth } from "$/pages/authentication/hooks";
+import { useLogin } from "$/pages/authentication/login/hooks";
 import { useState } from "react";
 import { redirect } from "react-router-dom";
 

@@ -1,8 +1,8 @@
-import { JwtRepository } from "$infrastructure/repositories/jwt.repository";
+import { JwtRepository } from "$/infrastructure/repositories/jwt.repository";
 import { FetchApi } from "@eshop/application";
-import { CreateCustomerDTO } from "@eshop/business/domain/dtos";
+import { CreateCustomerDTO, CustomerDTO } from "@eshop/business/domain/dtos";
 import { CustomerEntity } from "@eshop/business/domain/entities";
-import { EmailObject } from "@eshop/business/domain/value-objects";
+import { EmailObject, IdObject } from "@eshop/business/domain/value-objects";
 import { CustomerRepositoryInterface } from "@eshop/business/infrastructure/ports";
 import z from "zod";
 
@@ -31,6 +31,12 @@ export class CustomerRepository
     });
     super(api);
     this.#api = api;
+  }
+  getById(id: IdObject): Promise<CustomerEntity | null> {
+    throw new Error("Method not implemented.");
+  }
+  update(id: IdObject, customerData: Partial<CustomerDTO>): Promise<CustomerEntity | null> {
+    throw new Error("Method not implemented.");
   }
 
   isAdmin(email: EmailObject): Promise<boolean> {

@@ -1,5 +1,5 @@
-import { ProductDetail } from "$pages/products/components";
-import { useProductSlugHook } from "$pages/products/hooks";
+import { ProductDetail } from "$/pages/products/components";
+import { useProductSlugHook } from "$/pages/products/hooks";
 import { Link, NavLink, useParams } from "react-router-dom";
 
 export function ProductCodePage() {

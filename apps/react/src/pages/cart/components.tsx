@@ -1,4 +1,4 @@
-import { ProductQuantityInCart } from "$shared/components/product-quantity-in-cart.component";
+import { ProductQuantityInCart } from "$/shared/components/product-quantity-in-cart.component";
 import {
   CartEntity,
   CartItemEntity,

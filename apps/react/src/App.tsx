@@ -1,17 +1,18 @@
-import { AuthContextProvider } from "$pages/authentication/context";
-import { LoginPage } from "$pages/authentication/login/index.page";
-import { RegisterPage } from "$pages/authentication/register/index.page";
-import { CartContextProvider } from "$pages/cart/context";
-import { CartPage } from "$pages/cart/index.page";
-import { CheckoutPage } from "$pages/checkout/index.page";
-import { ContactPage } from "$pages/contact/index.page";
-import { NotFoundPage } from "$pages/not-found/index.page";
-import { ProductCodePage } from "$pages/products/code.page";
-import { ProductsPage } from "$pages/products/index.page";
-import { AuthRedirectRoute } from "$shared/components/auth-redirect-route.component";
-import { Footer } from "$shared/components/footer.component";
-import { Header } from "$shared/components/header.component";
-import { PrivateRoute } from "$shared/components/private-route.component";
+
+import { AuthContextProvider } from "$/pages/authentication/context";
+import { LoginPage } from "$/pages/authentication/login/index.page";
+import { RegisterPage } from "$/pages/authentication/register/index.page";
+import { CartContextProvider } from "$/pages/cart/context";
+import { CartPage } from "$/pages/cart/index.page";
+import { CheckoutPage } from "$/pages/checkout/index.page";
+import { ContactPage } from "$/pages/contact/index.page";
+import { NotFoundPage } from "$/pages/not-found/index.page";
+import { ProductCodePage } from "$/pages/products/code.page";
+import { ProductsPage } from "$/pages/products/index.page";
+import { AuthRedirectRoute } from "$/shared/components/auth-redirect-route.component";
+import { Footer } from "$/shared/components/footer.component";
+import { Header } from "$/shared/components/header.component";
+import { PrivateRoute } from "$/shared/components/private-route.component";
 import { Route, BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
