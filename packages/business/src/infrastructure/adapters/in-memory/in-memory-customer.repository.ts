@@ -22,7 +22,7 @@ export class InMemoryCustomerRepository implements CustomerRepositoryInterface {
       return Promise.resolve(null);
     }
 
-    const isMatch = await existingCustomer.password.verify(password);
+    const isMatch = await existingCustomer.verifyPassword(password);
 
     if (!isMatch) {
       return Promise.resolve(null);

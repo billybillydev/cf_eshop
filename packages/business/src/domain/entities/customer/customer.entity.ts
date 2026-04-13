@@ -1,4 +1,4 @@
-import { CreateCustomerDTO, CustomerDTO } from "$domain/dtos/customer";
+import { CreateCustomerDTO, CustomerDTO, SanitizedCustomerDTO } from "$domain/dtos/customer";
 import { OrderEntity } from "$domain/entities/order";
 import { EmailObject, IdObject, PasswordObject } from "$domain/value-objects";
 import { FavoriteVO } from "$domain/value-objects/favorite.value-object";
@@ -8,7 +8,7 @@ export class CustomerEntity {
   username: string;
   firstname: string;
   email: EmailObject;
-  password: PasswordObject;
+  private password: PasswordObject;
   readonly createdAt: number = Date.now();
   updatedAt: number = Date.now();
   orders: OrderEntity[] = [];
@@ -43,6 +43,10 @@ export class CustomerEntity {
       orders: this.orders,
       favorites: this.favorites.map((favorite) => favorite.transformToDTO()),
     };
+  }
+
+  async verifyPassword(password: string) {
+    return this.password.verify(password);
   }
 
   static build(dto: CreateCustomerDTO & { id: number }): CustomerEntity {
