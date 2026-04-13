@@ -97,7 +97,7 @@ export class CustomerRepository
 
       const customer = CustomerEntity.build(customerData);
 
-      if (!(await customer.password.verify(password))) {
+      if (!(await customer.verifyPassword(password))) {
         throw new Error("Password verification failed");
       }
 

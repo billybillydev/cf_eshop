@@ -5,6 +5,8 @@
 @api_url = {{$dotenv HOST_URL}}:{{$dotenv PORT}}/api
 @bearerToken = {{login.token}}
 
+
+
 ### Get user favorites
 # @name get_favorites
 GET {{api_url}}/favorites

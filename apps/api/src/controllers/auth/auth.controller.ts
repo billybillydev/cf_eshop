@@ -1,6 +1,9 @@
 import { AppContext, config } from "$/config";
 import { CustomerRepository } from "$/infrastructure/repositories/customer.repository";
-import { CustomerEntity } from "@eshop/business/domain/entities";
+import {
+  CustomerEntity,
+  SanitizedCustomerEntity,
+} from "@eshop/business/domain/entities";
 import {
   CreateCustomerUseCase,
   GetCustomerByEmailUseCase,
@@ -120,10 +123,11 @@ async function generateToken<T extends Context>(
   customer: CustomerEntity,
   status: ContentfulStatusCode
 ) {
-  const { password, ...sanitizedCustomer } = customer.transformToDTO();
   const token = await sign(
     {
-      user: sanitizedCustomer,
+      user: new SanitizedCustomerEntity(
+        customer.transformToDTO()
+      ).transformToDTO(),
       exp: Math.floor(Date.now() / 1000) + 60 * 24 * 30,
     },
     config.jwtSecret

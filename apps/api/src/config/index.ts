@@ -1,5 +1,5 @@
-import { AppBindings } from "$config/bindings";
-import { AppVariables } from "$config/variables";
+import { AppBindings } from "$/config/bindings";
+import { AppVariables } from "$/config/variables";
 import "dotenv/config";
 
 // const envSchema = z.object({

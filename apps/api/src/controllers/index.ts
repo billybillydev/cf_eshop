@@ -7,6 +7,7 @@ import { categoryApiController } from "./category/category.controller";
 import { checkoutApiController } from "./checkout/checkout.controller";
 import { favoriteApiController } from "./favorite/favorite.controller";
 import { productApiController } from "./product/product.controller";
+import { customerController } from "$/controllers/customer/customer.controller";
 
 export const apiController = new Hono<AppContext>();
 
@@ -19,6 +20,7 @@ const routes = apiController
   .route("/checkout", checkoutApiController)
   .route("/favorites", favoriteApiController)
   .route("/products", productApiController)
+  .route("/customers", customerController)
   .route("/authenticate", authController)
   .route("/admin", adminController);
 
