@@ -30,13 +30,14 @@
     ]
   },
   "dependencies": {
-    "@eshop/application": "*",
-    "@eshop/business": "*",
-    "@eshop/css": "*",
+    "@eshop/application": "workspace:*",
+    "@eshop/business": "workspace:*",
+    "@eshop/css": "workspace:*",
+    "@eshop/hono-rpc": "workspace:*",
     "@t3-oss/env-core": "^0.10.1",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
-    "hono": "^4.7.11",
+    "hono": "4.12.9",
     "path": "^0.12.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
