@@ -1,0 +1,38 @@
+# ------------- API Favorite ------------- #
+@api_url = {{$dotenv HOST_URL}}:{{$dotenv PORT}}/api
+
+### Get user
+# @name login
+POST {{api_url}}/authenticate/token
+content-type: application/json
+
+{
+    "email": "t1@t.com",
+    "password": "azerty1234"
+}
+
+
+### Get is user admin
+# @name is_admin
+POST {{api_url}}/authenticate/admin
+content-type: application/json
+
+{
+    "email": "john@doe.com"
+}
+
+### Create user
+# @name create_user
+POST {{api_url}}/authenticate/account
+content-type: application/json
+
+{
+    "username": "t1",
+    "firstname": "Test 1",
+    "email": "t1@t.com",
+    "password": "azerty1234"
+}
+
+### Logout user
+# @name logout
+DELETE {{api_url}}/authenticate/logout

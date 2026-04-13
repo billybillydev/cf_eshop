@@ -1,0 +1,6 @@
+# ------------- API Category ------------- #
+@api_url = {{$dotenv HOST_URL}}:{{$dotenv PORT}}/api
+
+### Get Category list json
+# @name get_categories
+GET {{api_url}}/categories
