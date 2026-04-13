@@ -6,6 +6,18 @@ import { EmailObject, IdObject } from "@eshop/business/domain/value-objects";
 import { CustomerRepositoryInterface } from "@eshop/business/infrastructure/ports";
 import z from "zod";
 
+const customerDTOSchema = z.object({
+  id: z.number(),
+  email: z.string().email(),
+  username: z.string(),
+  password: z.string(),
+  firstname: z.string(),
+  createdAt: z.number().optional(),
+  updatedAt: z.number().optional(),
+  orders: z.array(z.any()),
+  favorites: z.array(z.any()),
+})
+
 type JwtTokenResponse =
   | {
       success: true;
@@ -21,6 +33,7 @@ export class CustomerRepository
   implements CustomerRepositoryInterface
 {
   readonly #api: FetchApi;
+
   constructor() {
     const api = new FetchApi({
       defaultOptions: {
@@ -32,9 +45,27 @@ export class CustomerRepository
     super(api);
     this.#api = api;
   }
-  getById(id: IdObject): Promise<CustomerEntity | null> {
-    throw new Error("Method not implemented.");
+
+  async getById(id: IdObject): Promise<CustomerEntity | null> {
+    try {
+      const customer = await this.#api.get<CustomerDTO | null>(
+        `/api/customers`,
+        customerDTOSchema
+      );
+
+      if (!customer) {
+        return null;
+      }
+
+      console.log({ customer })
+      
+      return new CustomerEntity(customer);
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
+
   update(id: IdObject, customerData: Partial<CustomerDTO>): Promise<CustomerEntity | null> {
     throw new Error("Method not implemented.");
   }

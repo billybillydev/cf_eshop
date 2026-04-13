@@ -12,4 +12,14 @@ export class JwtRepository {
       },
     };
   }
+
+  clearToken(): void {
+    if (this.api.defaultOptions?.headers) {
+      const headers = { ...this.api.defaultOptions.headers };
+      
+      if ("Authorization" in headers) {
+        Reflect.deleteProperty(headers, "Authorization");
+      }
+    }
+  }
 }

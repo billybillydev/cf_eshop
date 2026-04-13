@@ -8,11 +8,12 @@ import { honoClientRPC } from "@eshop/hono-rpc";
 export class FavoriteRepository implements FavoriteRepositoryInterface {
   private readonly clientRpc: ReturnType<typeof honoClientRPC>;
 
-  constructor(params: { apiUrl: string; token?: string }) {
-    if (!params.apiUrl) {
-      throw new Error("API_URL is not defined");
-    }
-    this.clientRpc = honoClientRPC(params.apiUrl);
+  constructor(params: { token: string }) {
+    this.clientRpc = honoClientRPC("/api", {
+      headers: {
+        Authorization: `Bearer ${params.token}`,
+      },
+    });
     
   }
 

@@ -3,6 +3,7 @@ import { useCartContext } from "$/pages/cart/hooks";
 import { useCategoryList } from "$/pages/category/hooks";
 import { Button } from "$/shared/components/button.component";
 import { ProductQuantityInCart } from "$/shared/components/product-quantity-in-cart.component";
+import { useFavorite } from "$/shared/hooks/favorite.hooks";
 import {
   CartItemEntity,
   CartItemProductEntity,
@@ -10,6 +11,8 @@ import {
   ProductEntity,
   ProductItemEntity,
 } from "@eshop/business/domain/entities";
+import { FavoriteVO } from "@eshop/business/domain/value-objects";
+import clsx from "clsx";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -136,9 +139,26 @@ export function ProductDetail({
   item: Omit<ProductEntity, "equals">;
 }) {
   const { addToCart, getCartItemByProductId, cart } = useCartContext();
+  const { add, remove, isProductInFavorites } = useFavorite();
+
   const [cartItemEntity, setCartItemEntity] = useState<CartItemEntity | null>(
     null
   );
+
+  async function toggleFavorite() {
+    if (isProductInFavorites(item.id)) {
+      await remove(item.id, item.name);
+    } else {
+      await add(
+        new FavoriteVO({
+          productId: item.id.value(),
+          productName: item.name,
+          productImage: item.image,
+          inventoryStatus: item.inventoryStatus,
+        })
+      );
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -343,10 +363,16 @@ export function ProductDetail({
                 ) : null}
 
                 <button
-                  className="inline-flex h-10 w-full sm:w-auto items-center justify-center rounded-lg border border-border bg-card px-4 text-sm font-medium
-                             hover:bg-accent hover:text-accent-foreground"
+                  className={clsx(
+                    "inline-flex h-10 w-full sm:w-auto items-center justify-center rounded-lg border  px-4 text-sm font-medium",
+                    "hover:bg-accent hover:text-accent-foreground",
+                    isProductInFavorites(item.id)
+                      ? "bg-accent text-accent-foreground border-transparent"
+                      : "border-border bg-card"
+                  )}
+                  onClick={toggleFavorite}
                 >
-                  Save
+                  {isProductInFavorites(item.id) ? "Saved" : "Save"}
                 </button>
               </div>
 

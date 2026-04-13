@@ -126,8 +126,8 @@ function UserPopover({ onLogout }: { onLogout: () => void }) {
               {item.label}
             </NavLink>
           ))}
-          {/* <div className="border-t border-border my-1" /> */}
-          {/* <button
+          <div className="border-t border-border my-1" />
+          <button
             onClick={() => {
               setOpen(false);
               onLogout();
@@ -135,7 +135,7 @@ function UserPopover({ onLogout }: { onLogout: () => void }) {
             className="block w-full border-t mt-2 border-border text-left px-4 py-2 text-sm text-destructive hover:bg-accent"
           >
             Logout
-          </button> */}
+          </button>
         </div>
       )}
     </div>
