@@ -37,7 +37,7 @@ export function Header() {
             >
               Products
             </NavLink>
-            
+
             <NavLink
               to="/contact"
               className="hidden sm:inline-flex h-9 items-center rounded-md px-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
@@ -56,7 +56,29 @@ export function Header() {
             </NavLink>
 
             {token ? (
-              <UserPopover onLogout={handleLogout} />
+              // <UserPopover onLogout={handleLogout} />
+              <>
+                <NavLink
+                  to="/account/favorites"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-95"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-label="account"
+                  >
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </NavLink>
+              </>
             ) : location.pathname !== "/login" &&
               location.pathname !== "/register" ? (
               <NavLink to="/login" className={authClass}>
@@ -85,9 +107,9 @@ function UserPopover({ onLogout }: { onLogout: () => void }) {
   }, []);
 
   const menuItems = [
-    { to: "/profile", label: "Profile" },
-    { to: "/orders", label: "Orders" },
-    { to: "/favorites", label: "Favorites" },
+    { to: "/account/profile", label: "Profile" },
+    { to: "/account/orders", label: "Orders" },
+    { to: "/account/favorites", label: "Favorites" },
   ];
 
   return (
@@ -126,8 +148,8 @@ function UserPopover({ onLogout }: { onLogout: () => void }) {
               {item.label}
             </NavLink>
           ))}
-          <div className="border-t border-border my-1" />
-          <button
+          {/* <div className="border-t border-border my-1" /> */}
+          {/* <button
             onClick={() => {
               setOpen(false);
               onLogout();
@@ -135,7 +157,7 @@ function UserPopover({ onLogout }: { onLogout: () => void }) {
             className="block w-full border-t mt-2 border-border text-left px-4 py-2 text-sm text-destructive hover:bg-accent"
           >
             Logout
-          </button>
+          </button> */}
         </div>
       )}
     </div>

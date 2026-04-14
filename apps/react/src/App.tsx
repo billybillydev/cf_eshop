@@ -1,4 +1,6 @@
 
+import { AccountFavoritesPage } from "$/pages/account/favorites/index.page";
+import { AccountLayout } from "$/pages/account/layout";
 import { AuthContextProvider } from "$/pages/authentication/context";
 import { LoginPage } from "$/pages/authentication/login/index.page";
 import { RegisterPage } from "$/pages/authentication/register/index.page";
@@ -27,6 +29,9 @@ function AppContent() {
         <main className="flex-1 relative">
           <Routes>
             <Route element={<PrivateRoute />}>
+              <Route path="/account" element={<AccountLayout />}>
+                <Route path="favorites" element={<AccountFavoritesPage />} />
+              </Route>
             </Route>
             <Route path="/cart" Component={CartPage} />
             <Route path="/checkout" Component={CheckoutPage} />
