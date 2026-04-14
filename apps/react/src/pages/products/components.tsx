@@ -365,7 +365,7 @@ export function ProductDetail({
 
                 <button
                   className={clsx(
-                    "inline-flex h-10 w-full sm:w-auto items-center justify-center rounded-lg border  px-4 text-sm font-medium",
+                    "inline-flex h-10 items-center justify-center rounded-lg border  px-4 text-sm font-medium",
                     "hover:bg-accent hover:text-accent-foreground",
                     isProductInFavorites(item.id)
                       ? "bg-accent text-accent-foreground border-transparent"
