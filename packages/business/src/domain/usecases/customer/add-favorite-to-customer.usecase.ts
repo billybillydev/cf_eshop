@@ -36,6 +36,7 @@ export class AddProductToCustomerFavoriteUseCase {
       customer.id,
       new FavoriteVO({
         productId: product.id.value(),
+        productCode: product.code,
         productName: product.name,
         productImage: product.image,
         inventoryStatus: product.inventoryStatus,

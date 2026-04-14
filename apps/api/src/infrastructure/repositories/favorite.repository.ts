@@ -28,6 +28,7 @@ export class FavoriteRepository
         product: {
           columns: {
             name: true,
+            code: true,
             image: true,
             inventoryStatus: true,
           },
@@ -40,6 +41,7 @@ export class FavoriteRepository
         new FavoriteVO({
           productId: favorite.productId,
           createdAt: favorite.createdAt,
+          productCode: favorite.product.code,
           productName: favorite.product.name,
           productImage: favorite.product.image,
           inventoryStatus: favorite.product.inventoryStatus,

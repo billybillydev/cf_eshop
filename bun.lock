@@ -26,7 +26,6 @@
         "eslint-plugin-import": "^2.29.1",
         "rimraf": "^6.0.1",
         "tsup": "^8.2.4",
-        "typescript": "^5.6.2",
       },
       "peerDependencies": {
         "typescript": "^5.6.2",
@@ -98,6 +97,7 @@
         "@eshop/business": "workspace:*",
         "@eshop/css": "workspace:*",
         "@eshop/hono-rpc": "workspace:*",
+        "@mosidev/dat": "^2.4.1",
         "@t3-oss/env-core": "^0.10.1",
         "bcryptjs": "^3.0.3",
         "clsx": "^2.1.1",

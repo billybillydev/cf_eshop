@@ -2,7 +2,8 @@ import {
   EmptyFavorites,
   FavoriteItem,
 } from "$/pages/account/favorites/components";
-import { useFavorite } from "$/shared/hooks/favorite.hooks";
+import { useFavorite } from "$/pages/account/favorites/favorite.hooks";
+import { Dat } from "@mosidev/dat";
 
 export function AccountFavoritesPage() {
   const { favorites, remove } = useFavorite();
@@ -20,15 +21,19 @@ export function AccountFavoritesPage() {
         <EmptyFavorites />
       ) : (
         <ul className="space-y-3">
-          {favorites.map((favorite) => (
-            <FavoriteItem
-              key={favorite.productId.value()}
-              favorite={favorite}
-              onRemove={() =>
-                remove(favorite.productId, favorite.productName)
-              }
-            />
-          ))}
+          {[...favorites]
+            .sort((a, b) =>
+              new Dat(a.createdAt).isAfter(new Dat(b.createdAt)) ? -1 : 1
+            )
+            .map((favorite) => (
+              <FavoriteItem
+                key={favorite.productId.value()}
+                favorite={favorite}
+                onRemove={() =>
+                  remove(favorite.productId, favorite.productName)
+                }
+              />
+            ))}
         </ul>
       )}
     </div>

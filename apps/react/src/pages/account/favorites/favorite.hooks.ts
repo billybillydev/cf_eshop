@@ -91,7 +91,7 @@ export const useFavorite = () => {
       setFavorites(result);
     };
     fetchFavorites();
-  }, [user?.id.value()]);
+  }, [favorites, user?.id.value()]);
 
   return { favorites, add, remove, isProductInFavorites };
 };

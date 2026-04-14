@@ -5,6 +5,7 @@ import { Dat } from "@mosidev/dat";
 
 export class FavoriteVO {
   public readonly productId: IdObject;
+  public readonly productCode: string;
   public readonly productName: string;
   public readonly productImage: string;
   public readonly inventoryStatus: string;
@@ -12,6 +13,7 @@ export class FavoriteVO {
 
   constructor(data: AddCustomerFavoriteDTO) {
     this.productId = new IdObject(data.productId);
+    this.productCode = data.productCode;
     this.productName = data.productName;
     this.productImage = data.productImage;
     this.inventoryStatus = data.inventoryStatus;
@@ -21,6 +23,7 @@ export class FavoriteVO {
   transformToDTO(): CustomerFavoriteDTO {
     return {
       productId: this.productId.value(),
+      productCode: this.productCode,
       productName: this.productName,
       productImage: this.productImage,
       inventoryStatus: this.inventoryStatus,

@@ -34,7 +34,12 @@ export function FavoriteItem({
 
       <div className="flex-1 min-w-0 space-y-1">
         <h3 className="text-sm font-medium leading-tight truncate">
-          {favorite.productName}
+          <a
+            href={`/products/${favorite.productCode}`}
+            className="hover:underline"
+          >
+            {favorite.productName}
+          </a>
         </h3>
         <span
           className={clsx(
