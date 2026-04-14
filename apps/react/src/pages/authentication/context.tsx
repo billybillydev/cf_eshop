@@ -53,8 +53,6 @@ export const AuthContextProvider = ({ children }: PropsWithChildren) => {
             import.meta.env.VITE_JWT_SECRET,
             "HS256"
           );
-          console.log({ payload });
-          
           localStorage.setItem("token", token);
 
           const parsed = sanitizedCustomerSchema.safeParse(payload.user);
