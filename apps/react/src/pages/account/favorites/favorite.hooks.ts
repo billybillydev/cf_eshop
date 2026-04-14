@@ -88,10 +88,12 @@ export const useFavorite = () => {
 
       const result = await useCase.execute({ customerId: user.id.value() });
 
-      setFavorites(result);
+      if (result.length !== favorites.length) {
+        setFavorites(result);
+      }
     };
     fetchFavorites();
-  }, [favorites, user?.id.value()]);
+  }, [favorites.length, user?.id.value()]);
 
   return { favorites, add, remove, isProductInFavorites };
 };
