@@ -1,6 +1,7 @@
+import { AccountAsideMenu } from "$/pages/account/components";
 import { useAuth } from "$/pages/authentication/hooks";
 import clsx from "clsx";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const menuItems = [
   { label: "Profile", to: "/account/profile" },
@@ -12,6 +13,7 @@ const menuItems = [
 export function AccountLayout() {
   const { setToken, user } = useAuth();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   function handleLogout() {
     setToken("");
@@ -31,43 +33,12 @@ export function AccountLayout() {
         ) : null}
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Aside menu */}
-        <aside className="w-full md:w-56 shrink-0">
-          <nav className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
-            <ul className="divide-y divide-border">
-              {menuItems.map((item) => (
-                <li key={item.to}>
-                  <NavLink
-                    to={item.to}
-                    className={({ isActive }) =>
-                      clsx(
-                        "block px-4 py-3 text-sm font-medium transition",
-                        isActive
-                          ? "bg-accent text-accent-foreground"
-                          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                      )
-                    }
-                  >
-                    {item.label}
-                  </NavLink>
-                </li>
-              ))}
-              <li>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="w-full text-left px-4 py-3 text-sm font-medium text-destructive hover:bg-destructive/10 transition"
-                >
-                  Logout
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </aside>
+      <div className="flex gap-8">
+        <div className={pathname === "/account" ? "w-full" : "hidden md:block"}>
+          <AccountAsideMenu menuItems={menuItems} handleLogout={handleLogout} />
+        </div>
 
-        {/* Page content */}
-        <div className="flex-1 min-w-0">
+        <div className={pathname === "/account" ? "hidden" : "flex-1 min-w-0"}>
           <Outlet />
         </div>
       </div>
