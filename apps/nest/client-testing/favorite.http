@@ -1,0 +1,28 @@
+# ------------- API Favorite ------------- #
+# @import ./auth.http
+# @ref login
+
+@api_url = {{$dotenv HOST_URL}}:{{$dotenv PORT}}/api
+@bearerToken = {{login.token}}
+
+
+
+### Get user favorites
+# @name get_favorites
+GET {{api_url}}/favorites
+Authorization: Bearer {{bearerToken}}
+
+### Add product to favorites
+# @name add_to_favorites
+POST {{api_url}}/favorites
+Authorization: Bearer {{bearerToken}}
+content-type: application/json
+
+{
+    "productId": 13
+}
+
+### Remove product from favorites
+# @name remove_from_favorites
+DELETE {{api_url}}/favorites?productId=3
+Authorization: Bearer {{bearerToken}}

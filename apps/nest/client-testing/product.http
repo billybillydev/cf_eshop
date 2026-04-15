@@ -1,0 +1,123 @@
+# ------------- API Product ------------- #
+@api_url = {{$dotenv HOST_URL}}:{{$dotenv PORT}}/api
+
+
+
+### Create a product
+# @name create_product
+POST {{api_url}}/products
+content-type: application/json
+
+{
+    "name": "Spinner ninja",
+    "description": "yes we can",
+    "quantity": 25,
+    "category": {
+        "id": 2,
+        "name": "kids"
+    },
+    "internalReference": "The way of shinobi",
+    "shellId": 239,
+    "price": 299,
+    "image": "https://loremflickr.com/cache/resized/defaultImage.small_640_480_nofilter.jpg"
+}
+
+
+
+
+### Get Product list
+# @name get_products
+GET {{api_url}}/products
+Content-Type: application/json
+
+
+
+
+### Get Product by ID
+# @name get_product_by_id
+GET {{api_url}}/products/27
+
+
+
+
+### Get Product by code
+# @name get_product_by_code
+GET {{api_url}}/products/code/generic-fresh-chicken
+
+
+
+
+### Update a product
+# @name update_product
+PATCH {{api_url}}/products/51
+content-type: application/json
+
+{
+    "quantity": 36
+}
+
+
+
+### Delete a product by id
+# @name delete_product
+DELETE {{api_url}}/products/47
+
+
+
+### Filter products by category
+# @name filter_products_by_category
+GET {{api_url}}/products?category=kids
+
+
+
+### Filter products by category with empty list
+# @name filter_products_by_category_empty
+GET {{api_url}}/products?category=inexistant
+
+
+
+### Filter products by product name
+# @name filter_products_by_name
+GET {{api_url}}/products?productName=spinn
+
+
+
+### Filter products by product name with empty list
+# @name filter_products_by_name_empty
+GET {{api_url}}/products?productName=abcd
+
+
+
+### Filter products by product name and category
+# @name filter_products_by_name_and_category
+GET {{api_url}}/products?productName=rec&category=shoes
+
+
+
+### Products pagination with limit = 18
+# @name products_pagination_limit_18
+GET {{api_url}}/products/paginate?page=1&limit=8
+
+
+
+### Products pagination with limit = 16
+# @name products_pagination_limit_16
+GET {{api_url}}/products/paginate?page=2&limit=16
+
+
+
+### Products pagination with page greater than last page
+# @name products_pagination_page_greater_than_last
+GET {{api_url}}/products/paginate?page=5&limit=16
+
+
+
+### Products pagination with productName as filters
+# @name products_pagination_with_productName
+GET {{api_url}}/products/paginate?limit=8&page=1&productName=fr
+
+
+
+### Products pagination with productName and category as filters
+# @name products_pagination_with_productName_and_category
+GET {{api_url}}/products/paginate?category=kids&productName=fr&page=1&limit=8

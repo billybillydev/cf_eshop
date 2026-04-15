@@ -6,6 +6,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+*.pid
+*.pid.lock
+*.seed
 
 node_modules
 **/node_modules
@@ -25,10 +28,28 @@ dist-ssr
 *.sw?
 
 .env
-
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.project
+.classpath
+*.launch
+*.sublime-workspace
+**/.nyc_output
+**/.settings/
+**/.temp
+**/.tmp
+**/build
+**/coverage
+**/.c9/
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 .turbo
 
 **/public
+**/drizzle
 **/.wrangler
 **/.next
+
+local.db

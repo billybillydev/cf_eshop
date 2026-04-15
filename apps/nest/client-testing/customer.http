@@ -1,0 +1,13 @@
+# ------------- API Customer ------------- #
+# @import ./auth.http
+# @ref login
+
+@api_url = {{$dotenv HOST_URL}}:{{$dotenv PORT}}/api
+@bearerToken = {{login.token}}
+
+
+
+### Get Customer by ID
+# @name get_customer
+GET {{api_url}}/customers
+Authorization: Bearer {{bearerToken}}
